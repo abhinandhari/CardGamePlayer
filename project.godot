@@ -1,0 +1,23 @@
+config_version=5
+
+[application]
+
+config/name="CardGamePlayer"
+run/main_scene="uid://c53ccdgcjf7bk"
+config/features=PackedStringArray("4.4", "Mobile")
+config/icon="res://icon.svg"
+
+[display]
+
+window/size/viewport_width=1920
+window/size/viewport_height=1080
+window/stretch/mode="canvas_items"
+window/stretch/aspect="ignore"
+
+[editor]
+
+version_control/autoload_on_startup=true
+
+[rendering]
+
+renderer/rendering_method="mobile"

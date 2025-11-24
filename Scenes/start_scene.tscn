@@ -1,0 +1,54 @@
+[gd_scene load_steps=2 format=3 uid="uid://c53ccdgcjf7bk"]
+
+[ext_resource type="Script" uid="uid://chd0llib5h5hj" path="res://Scripts/MenuControls/StartScreen.gd" id="1_82sop"]
+
+[node name="StartScene" type="Node2D"]
+script = ExtResource("1_82sop")
+
+[node name="OptionsContainer" type="VBoxContainer" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -196.0
+offset_top = -85.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(2, 2)
+
+[node name="GameMode" type="HBoxContainer" parent="OptionsContainer"]
+layout_mode = 2
+
+[node name="Select Game Mode" type="Label" parent="OptionsContainer/GameMode"]
+layout_mode = 2
+text = "Game Mode : "
+
+[node name="OptionButton" type="OptionButton" parent="OptionsContainer/GameMode"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PlayerCount" type="HBoxContainer" parent="OptionsContainer"]
+layout_mode = 2
+
+[node name="Player" type="Label" parent="OptionsContainer/PlayerCount"]
+layout_mode = 2
+text = "Player Count : "
+
+[node name="OptionButton" type="OptionButton" parent="OptionsContainer/PlayerCount"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Start" type="Button" parent="OptionsContainer"]
+layout_mode = 2
+text = "Start !"
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[connection signal="item_selected" from="OptionsContainer/GameMode/OptionButton" to="." method="_on_selecting_game_mode"]
+[connection signal="item_selected" from="OptionsContainer/PlayerCount/OptionButton" to="." method="_on_selecting_player_count"]
+[connection signal="pressed" from="OptionsContainer/Start" to="." method="_on_start_pressed"]

@@ -1,0 +1,27 @@
+[gd_scene load_steps=2 format=3 uid="uid://cqmubmbnexs5m"]
+
+[ext_resource type="Script" uid="uid://bch727frshqhy" path="res://Scripts/GameArea.gd" id="1_k0abi"]
+
+[node name="GameArea" type="Node2D"]
+script = ExtResource("1_k0abi")
+duration = 1.0
+
+[node name="Deck" type="Node2D" parent="."]
+
+[node name="Controls" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="DrawCard" type="Button" parent="Controls"]
+layout_mode = 0
+offset_left = 62.0
+offset_top = 931.0
+offset_right = 246.0
+offset_bottom = 1020.0
+tooltip_text = "DRAW CARD"
+text = "DRAW CARD"
+
+[connection signal="pressed" from="Controls/DrawCard" to="." method="_on_draw_card_pressed"]
