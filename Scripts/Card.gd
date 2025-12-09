@@ -3,35 +3,35 @@ class_name AbstractCard extends Node2D
 @export var power:int
 @export var title:String
 @export var gameMode:String
-@export var location :String
+			
 @export var card_size:Vector2
+
 
 func _ready() -> void:
 	card_size=Vector2(150,200)
-	location="NIL"
 	gameMode="Abstract"
 	title="AbstractCard"
 	power=-1023
 	print("Abstract Card has been created. Fix Code")
 	pass
-
+	
+func initialize(x:int):
+	setCardProperties(title,x)
+	return self
+	
 func setCardProperties(title:String,pow:int):
 	self.title=title
 	self.power=pow
-	var spr:Sprite2D = get_node("Control/Art")
+	var spr:Sprite2D = get_node("ImageDetails/Art")
 	spr.texture = load("res://Sprites/warningImg.jpg")
 	print("Abstract Card. No Porperties. Fix")
 	pass
-	
-func initialize(x:int):
-	setCardProperties(title,power)
-	return self
 	
 func perform_action():
 	print("The abstract card is performing an action. Oh no. Fix")	
 	
 func _to_string() -> String:
-	return title+" "+str(power)
+	return title+" - "+str(power)
 	
 
 func get_power() ->int:
@@ -48,5 +48,10 @@ func set_card_size(sprite: Sprite2D, target_size := Vector2(300, 400)):
 	var scale_factor = target_size / tex_size
 	sprite.scale = scale_factor	
 	pass
-
+	
+func make_visible( front : bool=true):
+	get_node("ImageDetails/Art").visible=front
+	get_node("ImageDetails/Back").visible=!front
+	return
+		
 	

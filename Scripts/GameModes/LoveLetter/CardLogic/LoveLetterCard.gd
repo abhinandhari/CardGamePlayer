@@ -5,7 +5,6 @@ func _ready() -> void:
 	pass
 			
 func initialize(x:int):
-	location="DECK"
 #ONLY FOR DEV OKI. THIS WILL BE ONLY FOR LOVELETTER
 	gameMode="LoveLetter"
 	match x:
@@ -21,13 +20,13 @@ func initialize(x:int):
 	return self
 	
 func setCardProperties(title:String,pow:int):
+	#Love Letter only needs to call this once, hence the last make_visible() in this function
 #	Target variable I forgot to use, will be for resizing
 #	var target_size = Vector2(150, 220)
 	self.title=title
 	self.power=pow
 	position=Vector2(randf_range(-pow*600,pow*600),randf_range(-pow*600,pow*600))
 	rotate(pow*20)
-	print_tree_pretty()
 	var spr:Sprite2D = get_node("ImageDetails/Art")
 	spr.texture = load("res://Sprites/"+gameMode+"/"+title+".jpg")
 	print("Loading res://Sprites/"+gameMode+"/"+title+".jpg")
@@ -35,6 +34,7 @@ func setCardProperties(title:String,pow:int):
 	backSpr.texture=load("res://Sprites/"+gameMode+"/CardBack.jpeg")
 	set_card_size(spr)
 	set_card_size(backSpr)
+	make_visible(false)
 	pass	
 	
 	

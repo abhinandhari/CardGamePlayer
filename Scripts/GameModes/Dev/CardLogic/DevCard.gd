@@ -5,7 +5,6 @@ func _ready() -> void:
 	pass
 			
 func initialize(x:int):
-	location="DECK"
 #ONLY FOR DEV OKI. THIS WILL BE ONLY FOR LOVELETTER
 	gameMode="LoveLetter"
 	match x:
@@ -27,7 +26,6 @@ func setCardProperties(title:String,pow:int):
 	self.power=pow
 	position=Vector2(randf_range(-pow*600,pow*600),randf_range(-pow*600,pow*600))
 	rotate(pow*20)
-	print_tree_pretty()
 	var spr:Sprite2D = get_node("ImageDetails/Art")
 	spr.texture = load("res://Sprites/"+gameMode+"/"+title+".jpg")
 	print("Loading res://Sprites/"+gameMode+"/"+title+".jpg")

@@ -6,43 +6,45 @@ var deck:Array[AbstractCard]
 var gameMode:AbstractGameMode
 @export var playerCount:int 
 @export var duration:float
-	
+static var staticCenterOfScreen
 func _ready() -> void:
+	staticCenterOfScreen=centerOfScreen
 	tween=create_tween()
 	print("Game Mode "+ gameMode.gameModeName+" launching with "+str(playerCount)+" players.")
-	create_players(playerCount)
+	PlayerManager.create_players(self,playerCount)
 	create_deck(gameMode)
-	tween.parallel().tween_property($Controls,"visible",true,duration+0.25) #Enable Controls
-	#DeckManager.distributeToPlayers(players,gameMode,gameMode.startingCardCount)
+	await tween.finished
+	$Controls.visible=true
+	gameMode.card_game_start() #needs refinement.
 	
 func create_deck(gameMode:AbstractGameMode)->void:
 	deck = DeckManager.createCardsForGameMode(gameMode)
 	deck.shuffle()
 	for card in deck:
 		$Deck.add_child(card)
-		animateCard(card)
+		startupDeckAnimation(card)
 
-func create_players(count:int)->void:	
-	for i in range(count):
-		var newPlayer = Player.new()
-		newPlayer.set_id(i+1)
-		PlayerManager.add_player(newPlayer)
-		add_child(newPlayer)
-	pass
-		
-func animateCard(child):
+#func create_players(count:int)->void:	
+	#for i in range(count):
+		#var newPlayer = Player.new()
+		#newPlayer.set_id(i+1)
+		#PlayerManager.add_players(newPlayer)
+		#add_child(newPlayer)
+	#pass
+	
+#	Preferably, this gets handled elsewhere . for now keeping it here
+func startupDeckAnimation(child):
 	tween.parallel().tween_property(child,"position",centerOfScreen,duration).set_trans(Tween.TRANS_SINE)
-	tween.parallel().tween_property(child, "scale", Vector2(0.15, 0.2), duration).set_ease(Tween.EASE_IN)
+	tween.parallel().tween_property(child, "scale", Vector2(0.15, 0.2), duration).set_ease(Tween.EASE_OUT)
 	tween.parallel().tween_property(child, "rotation_degrees", 0, duration).set_trans(Tween.TRANS_CIRC)
 	pass
 	
 func _on_draw_card_pressed() -> void:
+	print("Parent scene")
 	print("Drawing card...")
-	var cardDrawn = DeckManager.draw_card()
-	if(cardDrawn.get_power()==-1):
-		return
-	print("Card Drawn is : "+cardDrawn.get_title())
-	$Deck.remove_child(cardDrawn)
-	if(deck.is_empty()):
-		DeckManager.empty_deck_actions(self)
-	pass
+	#Deck not hiding said card
+	PlayerManager.deal_to_player()
+	if(DeckManager.deck.is_empty()):
+		get_node("Controls/DrawCard").text="EMPTY DECK !"
+		get_node("Controls/DrawCard").disabled=true
+	PlayerManager.update_current_player()

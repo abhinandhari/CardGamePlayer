@@ -13,34 +13,20 @@ func _ready() -> void:
 static func createCardsForGameMode(type:AbstractGameMode):
 	deck = type.create_deck()
 	return deck
-##		The cards should be contained within the game mode itself
-	#match type.gameModeName:
-		#"LOVE_LETTER":  #BasicLoveLetter Game
-
-		#"DEV":
-			#print("Devmode, creating smol deck")
-			#for i in range(1,9):
-				#deck.append(createCard(i,type.gameModeName))
-	#return deck
 	
-static func draw_card() -> AbstractCard:
-	#if deck.size() > 0:
-		return deck.pop_back()	
-	#return createCard(-1,"Invalid")
-	
-#Actions to be performed whenever deck is empty.
+static func draw_card(source:Array[AbstractCard] = deck) -> AbstractCard:
+	var cardDrawn = source.pop_back()
+	cardDrawn.get_parent().remove_child(cardDrawn)
+	return cardDrawn
+		
 #I do not think this is the best way to do this.	
 static func empty_deck_actions(node :Node2D)->void: 
 		match node.name:
 			"GameArea":
-				print("Reached this snippet")
+				print("Deck is now empty")
 				var controlNode :Control= node.get_node_or_null("Controls/DrawCard")
 				print(controlNode)
 				controlNode.disabled=true
 				controlNode.text="EMPTY DECK!"
 				pass
 				
-static func distributeToPlayers(players:Player,gameMode:AbstractGameMode,noOfCards):
-	for i in noOfCards:
-		pass
-	pass

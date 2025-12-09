@@ -27,4 +27,9 @@ func load_up_scene():
 	cardScene.set_physics_process(true)
 	return cardScene	
 	
+func card_game_start():
+	print("IDK What should an abstract mode do?")
+	pass
+
+	
 	

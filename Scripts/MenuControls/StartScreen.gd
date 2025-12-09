@@ -37,8 +37,8 @@ func set_default_game_mode():
 	
 func build_game_modes()->Array[AbstractGameMode]:
 	var listOfModes:Array[AbstractGameMode]
-	listOfModes.append(GameModeBuilder.build_game_mode("DEV"))
 	listOfModes.append(GameModeBuilder.build_game_mode("LoveLetter"))
+	listOfModes.append(GameModeBuilder.build_game_mode("DEV"))
 	return listOfModes	
 
 func _on_selecting_game_mode(index: int) -> void:
