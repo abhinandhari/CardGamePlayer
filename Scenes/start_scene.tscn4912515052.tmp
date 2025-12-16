@@ -50,4 +50,5 @@ offset_right = 40.0
 offset_bottom = 40.0
 
 [connection signal="item_selected" from="OptionsContainer/GameMode/OptionButton" to="." method="_on_selecting_game_mode"]
+[connection signal="item_selected" from="OptionsContainer/PlayerCount/OptionButton" to="." method="_on_selecting_player_count"]
 [connection signal="pressed" from="OptionsContainer/Start" to="." method="_on_start_pressed"]

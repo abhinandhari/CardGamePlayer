@@ -5,6 +5,7 @@ func _init() -> void:
 	minPlayerCount=2
 	maxPlayerCount=8
 	startingCardCount=1
+	cardSizeOffset=Vector2(25,50)
 	
 func create_deck(rules="DEFAULT"):
 	var deck :Array[AbstractCard]=[]
@@ -24,4 +25,5 @@ func create_deck(rules="DEFAULT"):
 
 func card_game_start():
 	PlayerManager.deal_to_all_players(3)
+	PlayerManager.start_turn()
 	pass

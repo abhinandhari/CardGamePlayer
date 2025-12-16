@@ -2,7 +2,7 @@ class_name Player extends Node2D
 
 var hand : Array[AbstractCard] = []
 var id :int
-var scaler = 50
+var scaler = 60
 var showCards: bool:
 	set(value):
 		showCards = value
@@ -13,7 +13,7 @@ func _ready() -> void:
 	print("Created Player : "+str(id))
 	
 func add_card(card):
-	card.position=Vector2(120+scaler*hand.size(),120)
+	card.position=Vector2(120 + scaler*hand.size(),120)
 	card.make_visible(showCards)
 	hand.append(card)
 	print("Player "+str(id)+" : "+str(hand))

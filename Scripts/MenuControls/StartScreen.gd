@@ -51,7 +51,3 @@ func create_player_options_for_game_mode(gameMode:AbstractGameMode)	:
 		playerCountOptionsNode.add_item(str(i),i)
 	playerCountOptionsNode.select(0)
 	pass
-
-
-func _on_selecting_player_count(index: int) -> void:
-	pass # Replace with function body.

@@ -12,7 +12,7 @@ config_version=5
 
 config/name="CardGamePlayer"
 run/main_scene="uid://c53ccdgcjf7bk"
-config/features=PackedStringArray("4.4", "Mobile")
+config/features=PackedStringArray("4.5", "Mobile")
 config/icon="res://icon.svg"
 
 [display]
@@ -25,6 +25,10 @@ window/stretch/aspect="ignore"
 [editor]
 
 version_control/autoload_on_startup=true
+
+[input_devices]
+
+pointing/emulate_touch_from_mouse=true
 
 [rendering]
 

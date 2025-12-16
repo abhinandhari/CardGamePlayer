@@ -27,10 +27,10 @@ func setCardProperties(title:String,pow:int):
 	self.power=pow
 	position=Vector2(randf_range(-pow*600,pow*600),randf_range(-pow*600,pow*600))
 	rotate(pow*20)
-	var spr:Sprite2D = get_node("ImageDetails/Art")
+	var spr:TextureRect = get_node("ImageDetails/Art")
 	spr.texture = load("res://Sprites/"+gameMode+"/"+title+".jpg")
 	print("Loading res://Sprites/"+gameMode+"/"+title+".jpg")
-	var backSpr:Sprite2D = get_node("ImageDetails/Back")
+	var backSpr:TextureRect = get_node("ImageDetails/Back")
 	backSpr.texture=load("res://Sprites/"+gameMode+"/CardBack.jpeg")
 	set_card_size(spr)
 	set_card_size(backSpr)

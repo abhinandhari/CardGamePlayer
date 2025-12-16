@@ -8,6 +8,7 @@ class_name AbstractGameMode extends Node
 @export var startingCardCount:int
 const CARD_SCENE_PATH = "res://Scenes/card.tscn"
 const CARD_SCRIPT_PATH = "res://Scripts/GameModes/***/CardLogic/***Card.gd"
+static var cardSizeOffset =Vector2.ZERO
 
 func create_deck(rules:String="DEFAULT") -> Array[AbstractCard]:
 	push_error("create_deck not implemented")

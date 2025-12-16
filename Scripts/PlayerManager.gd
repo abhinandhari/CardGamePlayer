@@ -78,4 +78,5 @@ static func deal_to_all_players(cards: int):
 	pass
 	
 static func start_turn():
-	print("Turn of "+str(currentPlayer))	
+	print("Turn of "+str(currentPlayer))
+	#TO DO : SHOW VISUAL CHANGES ON PLAYER	
