@@ -35,7 +35,6 @@ func create_deck(gameMode:AbstractGameMode)->void:
 	
 #	Preferably, this gets handled elsewhere . for now keeping it here
 func startupDeckAnimation(child):
-	print_tree_pretty()
 	tween.parallel().tween_property(child,"position",staticCenterOfScreen,duration).set_trans(Tween.TRANS_SINE)
 	tween.parallel().tween_property(child, "scale", Vector2(0.15, 0.2), duration).set_ease(Tween.EASE_OUT)
 	tween.parallel().tween_property(child, "rotation_degrees", 0, duration).set_trans(Tween.TRANS_CIRC)

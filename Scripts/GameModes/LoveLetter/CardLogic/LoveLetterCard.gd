@@ -35,6 +35,12 @@ func setCardProperties(title:String,pow:int):
 	set_card_size(spr)
 	set_card_size(backSpr)
 	make_visible(false)
+	store_original_data()
 	pass	
+
+func play_card()-> void :
+	super()
+	pass
+
 	
 	

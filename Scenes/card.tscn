@@ -5,7 +5,15 @@
 [node name="Card" type="Node2D"]
 script = ExtResource("1_0qqmn")
 
-[node name="ImageDetails" type="Panel" parent="."]
+[node name="ImageDetails" type="TextureButton" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+stretch_mode = 0
 
 [node name="Back" type="TextureRect" parent="ImageDetails"]
 layout_mode = 0
@@ -16,11 +24,6 @@ offset_bottom = 400.0
 layout_mode = 0
 scale = Vector2(0.2, 0.2)
 
-[node name="Button" type="Button" parent="."]
-offset_right = 8.0
-offset_bottom = 8.0
-flat = true
-
 [connection signal="mouse_entered" from="ImageDetails" to="." method="_on_image_details_mouse_entered"]
 [connection signal="mouse_exited" from="ImageDetails" to="." method="_on_image_details_mouse_exited"]
-[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="ImageDetails" to="." method="_on_image_details_pressed"]
