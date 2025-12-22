@@ -1,5 +1,16 @@
 class_name LoveLetterMode extends AbstractGameMode
 
+enum CardType {
+	GUARD,
+	SAGE,
+	BARON,
+	HANDMAID,
+	PRINCE,
+	KING,
+	QUEEN,
+	PRINCESS
+}
+
 func _init() -> void:
 	gameModeName="LoveLetter"
 	minPlayerCount=2
@@ -27,3 +38,28 @@ func card_game_start():
 	PlayerManager.deal_to_all_players(3)
 	PlayerManager.start_turn()
 	pass
+	
+func request_play_card(cardPlayed:AbstractCard):
+	print("Card Played : ")
+	print(cardPlayed)
+	match cardPlayed.cardType:
+		CardType.GUARD:
+			print(cardPlayed.displayText + " is played")
+		CardType.SAGE:
+			print(cardPlayed.displayText + " is played")
+		CardType.BARON:
+			print(cardPlayed.displayText + " is played")
+		CardType.HANDMAID:
+			print(cardPlayed.displayText + " is played")
+		CardType.PRINCE:
+			print(cardPlayed.displayText + " is played")
+		CardType.KING:
+			print(cardPlayed.displayText + " is played")
+		CardType.QUEEN:
+			print(cardPlayed.displayText + " is played")
+		CardType.PRINCESS:
+			print(cardPlayed.displayText + " is played")
+		_:
+			print("Invalid move...")
+		
+	

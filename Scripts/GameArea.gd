@@ -3,7 +3,7 @@ class_name GameArea extends Node2D
 var tween
 var deck:Array[AbstractCard]
 @onready var centerOfScreen: Vector2=get_viewport().get_visible_rect().size / 2
-var gameMode:AbstractGameMode
+static var gameMode:AbstractGameMode
 @export var playerCount:int 
 @export var duration:float
 static var staticCenterOfScreen
@@ -49,3 +49,6 @@ func _on_draw_card_pressed() -> void:
 		get_node("Controls/DrawCard").text="EMPTY DECK !"
 		get_node("Controls/DrawCard").disabled=true
 	PlayerManager.update_current_player()
+
+static func get_game_mode():
+	return gameMode

@@ -31,6 +31,8 @@ func load_up_scene():
 func card_game_start():
 	print("IDK What should an abstract mode do?")
 	pass
-
+	
+func request_play_card(cardPlayed:AbstractCard):
+	print("Play cannot happen,this is Abstract!!!")
 	
 	

@@ -1,26 +1,25 @@
 class_name AbstractCard extends Node2D
 
 @export var power:int
-@export var title:String
-@export var gameMode:String
+@export var displayText:String
+var cardType
 @export var hover_scale: Vector2 = Vector2.ONE
 @export var tween_duration := 0.15
 var _scale:Vector2
 var _tween: Tween
 var _position
 func _ready() -> void:
-	gameMode="Abstract"
-	title="AbstractCard"
+	displayText="AbstractCard"
 	power=-1023
 	print("Abstract Card has been created. Fix Code")
 	pass
 	
 func initialize(x:int):
-	setCardProperties(title,x)
+	setCardProperties(displayText,x)
 	return self
 	
-func setCardProperties(title:String,pow:int):
-	self.title=title
+func setCardProperties(displayText:String,pow:int):
+	self.displayText=displayText
 	self.power=pow
 	var spr:Sprite2D = get_node("ImageDetails/Art")
 	spr.texture = load("res://Sprites/warningImg.jpg")
@@ -36,14 +35,14 @@ func perform_action():
 	print("The abstract card is performing an action. Oh no. Fix")	
 	
 func _to_string() -> String:
-	return title+" - "+str(power)
+	return displayText+" - "+str(power)
 	
 
 func get_power() ->int:
 	return power
 
-func get_title()-> String:
-	return title	
+func get_displayText()-> String:
+	return displayText	
 
 func set_card_size(sprite: TextureRect, target_size := Vector2(300, 400)):
 	if sprite.texture == null:
@@ -85,7 +84,7 @@ func scale_to(target_scale:Vector2=_scale):
 func _on_image_details_mouse_entered() -> void:
 	if(get_node("ImageDetails/Back").visible):
 		return
-	print("Hovering over card : "+title)
+	print("Hovering over card : "+displayText)
 	store_original_data()
 	scale_to(hover_scale)
 	pass # Replace with function body.
@@ -106,4 +105,6 @@ func _on_image_details_pressed() -> void:
 	pass # Replace with function body.
 	
 func play_card():
-	print("Playing Card : " + title)
+	print("Playing Card : " + displayText)
+	GameArea.get_game_mode().request_play_card(self)
+	
