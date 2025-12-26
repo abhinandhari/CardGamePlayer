@@ -24,4 +24,18 @@ offset_bottom = 1020.0
 tooltip_text = "DRAW CARD"
 text = "DRAW CARD"
 
+[node name="ModeSpecificElements" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -6.0
+offset_top = -6.0
+offset_right = 1914.0
+offset_bottom = 1074.0
+grow_horizontal = 2
+grow_vertical = 2
+
 [connection signal="pressed" from="Controls/DrawCard" to="." method="_on_draw_card_pressed"]

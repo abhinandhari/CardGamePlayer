@@ -21,24 +21,29 @@ func _init() -> void:
 	maxPlayerCount=8
 	startingCardCount=1
 	cardSizeOffset=Vector2(25,50)
-	currentState=GameState.IDLE
+	currentGameState=GameState.IDLE
+	drawButtonNeeded=false
+	
+var selectedPlayer #VARIABLE WHICH SHOULD BE STORING SELECTED PLAYER.
+var guardGuess #UI ELEMENT CREATED ON GUARD PLAY
+
 	
 func create_deck(rules="DEFAULT"):
 	var deck :Array[AbstractCard]=[]
 	var card
 	for i in range(5):
-		card=load_up_scene().initialize(1) #Guards
+		card=load_up_card_scene().initialize(1) #Guards
 		deck.append(card) 
 		pass
 	for i in range(2):
-		deck.append(load_up_scene().initialize(2)) 
-		deck.append(load_up_scene().initialize(3)) 
-		deck.append(load_up_scene().initialize(4)) 
-		deck.append(load_up_scene().initialize(5)) 
+		deck.append(load_up_card_scene().initialize(2)) 
+		deck.append(load_up_card_scene().initialize(3)) 
+		deck.append(load_up_card_scene().initialize(4)) 
+		deck.append(load_up_card_scene().initialize(5)) 
 		pass
-	deck.append(load_up_scene().initialize(6)) 
-	deck.append(load_up_scene().initialize(7)) 
-	deck.append(load_up_scene().initialize(8)) 
+	deck.append(load_up_card_scene().initialize(6)) 
+	deck.append(load_up_card_scene().initialize(7)) 
+	deck.append(load_up_card_scene().initialize(8)) 
 	connect_card_signals(deck)
 	return deck
 	
@@ -53,12 +58,12 @@ func card_game_start():
 	PlayerManager.start_turn()
 	#Hopefully temporary architecture flop
 	for player in PlayerManager.players.values():
-		player.connect("player_selected", Callable(self, "_on_player_selected"))
+		player.connect("player_selected",_on_player_selected)
 	pass
 	
 func _on_playing_card(cardPlayed,player):
 	print("Requesting playing card ->"+str(cardPlayed))
-	currentState=GameState.WAITING_FOR_TARGET
+	currentGameState=GameState.WAITING_FOR_TARGET
 	highlight_valid_players(cardPlayed.cardType)
 	cardInPlay=cardPlayed
 					
@@ -70,16 +75,19 @@ func highlight_valid_players(cardType):
 	#Possibly a highlight function. UI change preferred
 	pass
 	
-func _on_player_selected(selectedPlayer):
+func _on_player_selected(selectedPlayer:Player):
 	print("Selection works!")
 	print(selectedPlayer)
-	if(currentState!=GameState.IDLE):
-		perform_action_to_player(selectedPlayer)
-		print("Something happens here")
+	self.selectedPlayer=selectedPlayer
+	if(currentGameState!=GameState.IDLE):
+		perform_action_to_player()
 	else:
 		print("Nothing should happen")
+	return selectedPlayer.hand.get(0)
 		
-func perform_action_to_player(destinationPlayer,sourcePlayer=PlayerManager.currentPlayer):
+func perform_action_to_player(destinationPlayer=selectedPlayer,sourcePlayer=PlayerManager.currentPlayer):
+	var ui_element = get_parent().get_node("ModeSpecificElements")
+	ui_element.get_node("GuardGuess").visible=true
 	match cardInPlay.cardType:
 		CardType.GUARD:
 			print(cardInPlay.displayText + " is played")
@@ -100,4 +108,28 @@ func perform_action_to_player(destinationPlayer,sourcePlayer=PlayerManager.curre
 		_:
 			print("Invalid move...")
 	pass
+	
+func render_ui_elements():
+	guardGuess = load("res://Scenes/LoveLetter/HelperScenes/guard_guess.tscn").instantiate()
+	guardGuess.connect("guard_guess_selected",resolve_guard_play)
+	return guardGuess
+	
+func resolve_guard_play(selectedValue):
+	currentGameState=GameState.RESOLVING
+	print("The game mode got the value : "+str(selectedValue))
+	print("This is compared with :"+str(selectedPlayer.hand.get(0).cardType))
+	print(CardType.find_key(selectedValue))
+	if(selectedValue == (selectedPlayer.hand.get(0).cardType)):
+		print("Player should be out!")
+	else:
+		print("Game Continues")
+	#End Turn
+	end_of_turn()
+	pass
+	
+func end_of_turn():
+	guardGuess.visible=false
+	selectedPlayer=null
+	PlayerManager.update_current_player()
+
 	

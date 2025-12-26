@@ -55,13 +55,13 @@ static func deal_to_player(player:Player=currentPlayer, source=DeckManager.deck)
 	player.add_card(card)
 	
 static func update_current_player(currPlayer=currentPlayer):
-	GameArea.get_game_mode().currentCardPlayed=null
 	var newPlayerId = (currentPlayer.id+1) % players.size()
 	if(newPlayerId==0):
 		newPlayerId=players.size()
 	currentPlayer = players.get(newPlayerId)
 	hide_all_other_players_cards_except(currentPlayer)
 	pass	
+	
 static func 	hide_all_other_players_cards_except(selectedPlayer: Player):
 	for player in players.values():
 		if(player!=selectedPlayer):

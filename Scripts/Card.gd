@@ -5,7 +5,7 @@ class_name AbstractCard extends Node2D
 @export var displayText:String
 var cardType
 @export var hover_scale: Vector2 = Vector2.ONE
-@export var tween_duration := 0.15
+@export var tween_duration := 0.25
 var cardState
 var _scale:Vector2
 var _tween: Tween

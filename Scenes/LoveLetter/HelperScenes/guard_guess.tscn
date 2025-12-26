@@ -1,0 +1,65 @@
+[gd_scene load_steps=2 format=3 uid="uid://cejd8vlynqwyp"]
+
+[ext_resource type="Script" uid="uid://nw4vx064i7m2" path="res://Scripts/GameModes/LoveLetter/UIElements/GuardGuess.gd" id="1_bjh27"]
+
+[node name="GuardGuess" type="Control"]
+visible = false
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_bjh27")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 0
+offset_left = -200.0
+offset_top = -200.0
+offset_right = -66.0
+offset_bottom = -150.0
+scale = Vector2(2, 2)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Options(ForFutureUI)" type="GridContainer" parent="Panel/VBoxContainer"]
+visible = false
+layout_mode = 2
+columns = 4
+
+[node name="Label" type="Label" parent="Panel/VBoxContainer"]
+layout_mode = 2
+text = "Select Your Card!"
+
+[node name="OptionButton" type="OptionButton" parent="Panel/VBoxContainer"]
+layout_mode = 2
+item_count = 8
+popup/item_0/text = "Sage"
+popup/item_0/id = 2
+popup/item_1/text = "Baron"
+popup/item_1/id = 3
+popup/item_2/text = "HandMaid"
+popup/item_2/id = 4
+popup/item_3/text = "Prince"
+popup/item_3/id = 5
+popup/item_4/text = "King"
+popup/item_4/id = 6
+popup/item_5/text = "Queen"
+popup/item_5/id = 7
+popup/item_6/text = "Princess"
+popup/item_6/id = 8
+popup/item_7/text = "(TEMP)Guard"
+popup/item_7/id = 1
+
+[node name="Select" type="Button" parent="Panel/VBoxContainer"]
+layout_mode = 2
+disabled = true
+text = "SELECT"
+
+[connection signal="item_selected" from="Panel/VBoxContainer/OptionButton" to="." method="_on_option_button_item_selected"]
+[connection signal="pressed" from="Panel/VBoxContainer/Select" to="." method="_on_select_pressed"]

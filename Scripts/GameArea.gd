@@ -10,6 +10,9 @@ static var staticCenterOfScreen
 var cardGameSize = Vector2(-150,-200)
 
 func _ready() -> void:
+	add_child(gameMode)
+	$ModeSpecificElements.add_child(gameMode.render_ui_elements())
+	$Controls/DrawCard.visible=gameMode.drawButtonNeeded
 	staticCenterOfScreen=centerOfScreen-gameMode.cardSizeOffset
 	tween=create_tween()
 	print("Game Mode "+ gameMode.gameModeName+" launching with "+str(playerCount)+" players.")
