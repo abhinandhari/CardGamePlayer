@@ -1,6 +1,37 @@
-[gd_scene load_steps=2 format=3 uid="uid://desbrw0wqbf1c"]
+[gd_scene load_steps=3 format=3 uid="uid://desbrw0wqbf1c"]
 
 [ext_resource type="Script" uid="uid://bx5rqo8oavy46" path="res://Scripts/Player/Player.gd" id="1_v0iea"]
+[ext_resource type="Texture2D" uid="uid://c2b6xfoooiq08" path="res://Sprites/LoveLetter/PlayerSprites/player1.png" id="2_cvnsp"]
 
 [node name="Player" type="Node2D"]
 script = ExtResource("1_v0iea")
+
+[node name="PlayerIcon" type="TextureButton" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+disabled = true
+texture_normal = ExtResource("2_cvnsp")
+
+[node name="UIPlayerDetails" type="VBoxContainer" parent="."]
+visible = false
+z_index = 10
+offset_right = 123.0
+offset_bottom = 23.0
+
+[node name="DetailBox" type="HBoxContainer" parent="UIPlayerDetails"]
+layout_mode = 2
+
+[node name="CardCountHeader" type="Label" parent="UIPlayerDetails/DetailBox"]
+z_index = 10
+layout_mode = 2
+text = "Cards In Hand :"
+
+[node name="CardCount" type="Label" parent="UIPlayerDetails/DetailBox"]
+layout_mode = 2
+text = "0"
+
+[node name="EffectsComponent" type="Node" parent="."]
+
+[connection signal="mouse_entered" from="PlayerIcon" to="." method="_on_player_icon_mouse_entered"]
+[connection signal="mouse_exited" from="PlayerIcon" to="." method="_on_player_icon_mouse_exited"]
+[connection signal="pressed" from="PlayerIcon" to="." method="_on_player_icon_pressed"]

@@ -8,6 +8,7 @@ static var gameMode:AbstractGameMode
 @export var duration:float
 static var staticCenterOfScreen
 var cardGameSize = Vector2(-150,-200)
+
 func _ready() -> void:
 	staticCenterOfScreen=centerOfScreen-gameMode.cardSizeOffset
 	tween=create_tween()
@@ -17,6 +18,7 @@ func _ready() -> void:
 	await tween.finished
 	$Controls.visible=true
 	gameMode.card_game_start() #needs refinement.
+	
 	
 func create_deck(gameMode:AbstractGameMode)->void:
 	deck = DeckManager.createCardsForGameMode(gameMode)
@@ -48,7 +50,8 @@ func _on_draw_card_pressed() -> void:
 	if(DeckManager.deck.is_empty()):
 		get_node("Controls/DrawCard").text="EMPTY DECK !"
 		get_node("Controls/DrawCard").disabled=true
-	PlayerManager.update_current_player()
+	#Commenting temporarily. 
+	#TODO: Player should only be updated when the turn is completedly resolved
 
 static func get_game_mode():
 	return gameMode

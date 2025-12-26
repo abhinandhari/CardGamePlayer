@@ -1,8 +1,5 @@
 class_name PlayerManager extends Node
 
-func _ready() -> void:
-	print("Player Manager has been created")
-
 static var players:Dictionary = {}
 static var currentPlayer: Player :
 	get:
@@ -12,14 +9,16 @@ static var currentPlayer: Player :
 		currentPlayer.showCards=true
 		print("Current player changed:", value)
 static var angle_step #Used to position the players
-static var radius_x:float = 800
-static var radius_y:float = 400
+static var radius_x:float = 720
+static var radius_y:float = 360
 const playerScene = preload("res://Scenes/player.tscn")
 
-func get_players():
-	return players.values()
+signal player_clicked(player)
+
+func _ready() -> void:
+	print("Player Manager Created.")
 	
-static func create_players(parent:Node,count : int): #Circumvent godot scene creation
+static func create_players(parent:Node,count : int): #Parent is to Circumvent godot scene creation
 	for i in range(1,count+1):
 		var newPlayer = playerScene.instantiate()
 		newPlayer.id=i
@@ -56,6 +55,7 @@ static func deal_to_player(player:Player=currentPlayer, source=DeckManager.deck)
 	player.add_card(card)
 	
 static func update_current_player(currPlayer=currentPlayer):
+	GameArea.get_game_mode().currentCardPlayed=null
 	var newPlayerId = (currentPlayer.id+1) % players.size()
 	if(newPlayerId==0):
 		newPlayerId=players.size()
@@ -69,7 +69,6 @@ static func 	hide_all_other_players_cards_except(selectedPlayer: Player):
 		else:
 			player.showCards=true
 
-
 static func deal_to_all_players(cards: int):
 	for i in range(cards):
 		for j in range(1,players.size()+1):
@@ -80,3 +79,16 @@ static func deal_to_all_players(cards: int):
 static func start_turn():
 	print("Turn of "+str(currentPlayer))
 	#TO DO : SHOW VISUAL CHANGES ON PLAYER	
+	
+static func enable_selection(playerList):
+	for player in playerList.values():
+		player.get_node("PlayerIcon").disabled=false
+		print(player)
+	pass
+	
+func send_to_gamemode():
+	print("I reached here? Damn")
+	pass
+
+	
+	

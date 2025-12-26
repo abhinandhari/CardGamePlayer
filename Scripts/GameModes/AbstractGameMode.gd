@@ -6,6 +6,8 @@ class_name AbstractGameMode extends Node
 @export var maxPlayerCount:int
 @export var description:String
 @export var startingCardCount:int
+var currentState
+var cardInPlay
 const CARD_SCENE_PATH = "res://Scenes/card.tscn"
 const CARD_SCRIPT_PATH = "res://Scripts/GameModes/***/CardLogic/***Card.gd"
 static var cardSizeOffset =Vector2.ZERO
@@ -32,7 +34,8 @@ func card_game_start():
 	print("IDK What should an abstract mode do?")
 	pass
 	
-func request_play_card(cardPlayed:AbstractCard):
+#Was using the below function until I realised I should be using signals instead.
+func request_play_card(cardPlayed:AbstractCard,player):
 	print("Play cannot happen,this is Abstract!!!")
-	
+		
 	

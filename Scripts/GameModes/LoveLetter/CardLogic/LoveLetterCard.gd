@@ -1,10 +1,16 @@
-extends AbstractCard
+class_name LoveLetterCard extends AbstractCard
 
 func _ready() -> void:
 	print("Created "+displayText+" with power : "+str(power))
 	pass
 			
+enum CardState{
+	DEFAULT,
+	IN_PLAY,
+	DISCARDED
+}
 func initialize(x:int):
+	cardState=CardState.DEFAULT
 	match x:
 		1:
 			setCardProperties("Guard",x)
@@ -46,6 +52,7 @@ func setCardProperties(displayText:String,pow:int):
 	print("Loading res://Sprites/LoveLetter/"+displayText+".jpg")
 	var backSpr:TextureRect = get_node("ImageDetails/Back")
 	backSpr.texture=load("res://Sprites/LoveLetter/CardBack.jpeg")
+	$ImageDetails.disabled=true
 	set_card_size(spr)
 	set_card_size(backSpr)
 	make_visible(false)
@@ -54,6 +61,8 @@ func setCardProperties(displayText:String,pow:int):
 
 func play_card()-> void :
 	super()
+	cardState=CardState.IN_PLAY
+	print("Card is in play.")
 	pass
 
 	
