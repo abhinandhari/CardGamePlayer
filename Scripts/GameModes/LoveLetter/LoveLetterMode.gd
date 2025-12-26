@@ -56,9 +56,9 @@ func connect_card_signals(deck):
 func card_game_start():
 	PlayerManager.deal_to_all_players(1)
 	PlayerManager.start_turn()
-	#Hopefully temporary architecture flop
-	for player in PlayerManager.players.values():
+	for player in PlayerManager.players:
 		player.connect("player_selected",_on_player_selected)
+	print(PlayerManager.players)
 	pass
 	
 func _on_playing_card(cardPlayed,player):
@@ -69,10 +69,8 @@ func _on_playing_card(cardPlayed,player):
 					
 func highlight_valid_players(cardType):
 	print("Highlighting valid players")
-	#Write your selection validation logic here
 	var collection = PlayerManager.players
 	PlayerManager.enable_selection(collection)
-	#Possibly a highlight function. UI change preferred
 	pass
 	
 func _on_player_selected(selectedPlayer:Player):
@@ -86,7 +84,7 @@ func _on_player_selected(selectedPlayer:Player):
 	return selectedPlayer.hand.get(0)
 		
 func perform_action_to_player(destinationPlayer=selectedPlayer,sourcePlayer=PlayerManager.currentPlayer):
-	var ui_element = get_parent().get_node("ModeSpecificElements")
+	var ui_element = get_parent().get_node(UI_COMPONENTS_NODE)
 	ui_element.get_node("GuardGuess").visible=true
 	match cardInPlay.cardType:
 		CardType.GUARD:
@@ -121,6 +119,7 @@ func resolve_guard_play(selectedValue):
 	print(CardType.find_key(selectedValue))
 	if(selectedValue == (selectedPlayer.hand.get(0).cardType)):
 		print("Player should be out!")
+		PlayerManager.remove_player(selectedPlayer)
 	else:
 		print("Game Continues")
 	#End Turn
@@ -130,6 +129,16 @@ func resolve_guard_play(selectedValue):
 func end_of_turn():
 	guardGuess.visible=false
 	selectedPlayer=null
-	PlayerManager.update_current_player()
+	currentGameState=GameState.IDLE
+	emit_signal("turn_ended")
+	emit_signal("perform_transition","Turn ends...")
+	#Simply emulating next turn. Multiplayer will use another logic
+	load_next_player()
 
+func load_next_player():
+	emit_signal("turn_started")
+	emit_signal("perform_transition",str(PlayerManager.currentPlayer)+" 's Turn.")
+	#await get_tree().create_timer(1.0).timeout
+	currentGameState=GameState.IDLE
+	PlayerManager.update_current_player()
 	

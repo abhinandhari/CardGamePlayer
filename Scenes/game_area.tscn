@@ -1,10 +1,11 @@
-[gd_scene load_steps=2 format=3 uid="uid://cqmubmbnexs5m"]
+[gd_scene load_steps=3 format=3 uid="uid://cqmubmbnexs5m"]
 
 [ext_resource type="Script" uid="uid://bch727frshqhy" path="res://Scripts/GameArea.gd" id="1_k0abi"]
+[ext_resource type="PackedScene" uid="uid://dqiquo1e8l1ex" path="res://Scenes/LoveLetter/HelperScenes/transition.tscn" id="2_1i6hu"]
 
 [node name="GameArea" type="Node2D"]
 script = ExtResource("1_k0abi")
-duration = 2.5
+duration = 1.6
 
 [node name="Deck" type="Node2D" parent="."]
 
@@ -38,4 +39,15 @@ offset_bottom = 1074.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="Transistion" parent="." instance=ExtResource("2_1i6hu")]
+duration = 3.0
+
+[node name="VBoxContainer" parent="Transistion" index="0"]
+layout_mode = 0
+
+[node name="Sprite2D" parent="Transistion" index="1"]
+visible = false
+
 [connection signal="pressed" from="Controls/DrawCard" to="." method="_on_draw_card_pressed"]
+
+[editable path="Transistion"]

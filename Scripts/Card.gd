@@ -56,7 +56,6 @@ func set_card_size(sprite: TextureRect, target_size := Vector2(300, 400)):
 	var tex_size = sprite.texture.get_size()
 	var scale_factor = target_size / tex_size
 	sprite.scale = scale_factor	
-	print(sprite.texture.get_size())
 	$ImageDetails.size=sprite.texture.get_size()*scale_factor+Vector2.ONE*50
 	$ImageDetails/Art.position += $ImageDetails.size * scale_factor/16
 	$ImageDetails/Back.position += $ImageDetails.size * scale_factor/16
@@ -65,8 +64,8 @@ func set_card_size(sprite: TextureRect, target_size := Vector2(300, 400)):
 	
 func make_visible( front : bool=true):
 	get_node("ImageDetails").disabled=!front
-	get_node("ImageDetails/Art").visible=front
-	get_node("ImageDetails/Back").visible=!front
+	#get_node("ImageDetails/Art").visible=front
+	#get_node("ImageDetails/Back").visible=!front
 	return
 		
 func scale_to(target_scale:Vector2=_scale):

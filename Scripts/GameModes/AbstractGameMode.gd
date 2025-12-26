@@ -10,8 +10,12 @@ var currentGameState
 var cardInPlay
 const CARD_SCENE_PATH = "res://Scenes/card.tscn"
 const CARD_SCRIPT_PATH = "res://Scripts/GameModes/***/CardLogic/***Card.gd"
+const UI_COMPONENTS_NODE = "ModeSpecificElements"
+var transitionNode = load("res://Scenes/LoveLetter/HelperScenes/transition.tscn").instantiate()
 static var cardSizeOffset =Vector2.ZERO
 var drawButtonNeeded
+
+signal perform_transition(text)
 
 func create_deck(rules:String="DEFAULT") -> Array[AbstractCard]:
 	push_error("create_deck not implemented")
@@ -43,4 +47,6 @@ func render_ui_elements():
 	print("No elements created")
 	return null
 		
+func game_completed(winnerPlayer:Player):
+	pass
 	
