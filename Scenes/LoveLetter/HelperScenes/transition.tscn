@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://dvwtlf3agqkx7" path="res://Sprites/NextTurn.png" id="2_fuwhr"]
 
 [node name="Transistion" type="Control"]
+visible = false
 layout_mode = 3
 anchors_preset = 0
 script = ExtResource("1_q6o0f")
@@ -15,7 +16,8 @@ offset_bottom = 40.0
 [node name="CustomText" type="Label" parent="VBoxContainer"]
 layout_mode = 2
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="ScreenChange" type="TextureRect" parent="."]
+visible = false
+layout_mode = 0
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("2_fuwhr")
-centered = false

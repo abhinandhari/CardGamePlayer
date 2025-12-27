@@ -1,5 +1,7 @@
 extends Control
 
+signal perform_transition(text)
+
 @export var duration:float
 func _ready() -> void:
 	var gm = GameArea.get_game_mode()
@@ -11,9 +13,9 @@ func _ready() -> void:
 	
 func _perform_transition(text):
 	pass
-	#$".".visible=true
-	#$VBoxContainer/CustomText.text=text
-	#await get_tree().create_timer(duration).timeout
-	#$".".visible=false
-	#print("Reached here")
+	$".".visible=true
+	$VBoxContainer/CustomText.text=text
+	await get_tree().create_timer(duration).timeout
+	$".".visible=false
+	print("Reached here")
 	

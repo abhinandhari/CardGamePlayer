@@ -137,8 +137,9 @@ func end_of_turn():
 
 func load_next_player():
 	emit_signal("turn_started")
-	emit_signal("perform_transition",str(PlayerManager.currentPlayer)+" 's Turn.")
 	#await get_tree().create_timer(1.0).timeout
 	currentGameState=GameState.IDLE
 	PlayerManager.update_current_player()
+	emit_signal("perform_transition",str(PlayerManager.currentPlayer)+" 's Turn.")
+
 	

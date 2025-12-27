@@ -37,10 +37,8 @@ func set_id(id:int)->void:
 	self.id=id
 	
 func _to_string()->String:
-	var total_string = "Player "+str(id)
-	total_string+=str(hand)
+	var total_string = "Player "+str(id+1)
 	return total_string
-
 
 func _on_player_icon_mouse_entered() -> void:
 	make_details_visible()
