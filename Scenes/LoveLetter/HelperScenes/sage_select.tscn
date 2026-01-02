@@ -1,0 +1,50 @@
+[gd_scene load_steps=2 format=3 uid="uid://ha7f4wyio4y3"]
+
+[ext_resource type="Script" uid="uid://c30b786e0d24b" path="res://Scripts/GameModes/LoveLetter/UIElements/SageSelect.gd" id="1_uirwe"]
+
+[node name="SageSelect" type="Control"]
+layout_mode = 3
+anchor_left = 0.29
+anchor_top = 0.38
+anchor_right = 0.41
+anchor_bottom = 0.635
+offset_left = 17.7793
+offset_top = 21.8642
+offset_right = -212.621
+offset_bottom = -253.536
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_uirwe")
+
+[node name="Panel" type="Panel" parent="."]
+custom_minimum_size = Vector2(180, 180)
+layout_mode = 1
+offset_right = 180.0
+offset_bottom = 297.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+custom_minimum_size = Vector2(180, 180)
+layout_mode = 0
+offset_right = 111.0
+offset_bottom = 62.0
+
+[node name="Title" type="Label" parent="Panel/VBoxContainer"]
+custom_minimum_size = Vector2(180, 30)
+layout_mode = 2
+text = " *** 's card is..."
+autowrap_mode = 1
+
+[node name="CardImage" type="TextureRect" parent="Panel/VBoxContainer"]
+custom_minimum_size = Vector2(150, 200)
+layout_mode = 2
+expand_mode = 1
+
+[node name="CardName" type="Label" parent="Panel/VBoxContainer"]
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="Button" type="Button" parent="Panel/VBoxContainer"]
+layout_mode = 2
+text = "Close"
+
+[connection signal="pressed" from="Panel/VBoxContainer/Button" to="." method="_on_button_pressed"]

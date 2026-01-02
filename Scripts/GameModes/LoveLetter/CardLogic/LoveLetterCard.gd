@@ -1,6 +1,8 @@
 class_name LoveLetterCard extends AbstractCard
 
 func _ready() -> void:
+	if(power==0):
+		return
 	print("Created "+displayText+" with power : "+str(power))
 	pass
 			

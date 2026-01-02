@@ -13,7 +13,8 @@ enum CardType {
 enum GameState{
 	IDLE,
 	WAITING_FOR_TARGET,
-	RESOLVING
+	RESOLVING,
+	ROUND_COMPLETE
 }
 func _init() -> void:
 	gameModeName="LoveLetter"
@@ -22,12 +23,14 @@ func _init() -> void:
 	startingCardCount=1
 	cardSizeOffset=Vector2(25,50)
 	currentGameState=GameState.IDLE
-	drawButtonNeeded=false
+	drawButtonNeeded=true
 	
 var selectedPlayer #VARIABLE WHICH SHOULD BE STORING SELECTED PLAYER.
 var guardGuess #UI ELEMENT CREATED ON GUARD PLAY
-
+var sageSelect #UI ELEMENT CREATED ON SAGE PLAY
 	
+signal sage_card(card)
+
 func create_deck(rules="DEFAULT"):
 	var deck :Array[AbstractCard]=[]
 	var card
@@ -85,11 +88,15 @@ func _on_player_selected(selectedPlayer:Player):
 		
 func perform_action_to_player(destinationPlayer=selectedPlayer,sourcePlayer=PlayerManager.currentPlayer):
 	var ui_element = get_parent().get_node(UI_COMPONENTS_NODE)
-	ui_element.get_node("GuardGuess").visible=true
+	#ui_element.get_node("GuardGuess").visible=true
+	ui_element.get_node("SageSelect").visible=true
+	emit_signal("sage_card",destinationPlayer)
 	match cardInPlay.cardType:
 		CardType.GUARD:
+			#ui_element.get_node("GuardGuess").visible=true
 			print(cardInPlay.displayText + " is played")
 		CardType.SAGE:
+			#ui_element.get_node("SageGuess").visible=true
 			print(cardInPlay.displayText + " is played")
 		CardType.BARON:
 			print(cardInPlay.displayText + " is played")
@@ -108,10 +115,34 @@ func perform_action_to_player(destinationPlayer=selectedPlayer,sourcePlayer=Play
 	pass
 	
 func render_ui_elements():
+	var arr=[]
 	guardGuess = load("res://Scenes/LoveLetter/HelperScenes/guard_guess.tscn").instantiate()
 	guardGuess.connect("guard_guess_selected",resolve_guard_play)
-	return guardGuess
+	sageSelect = load("res://Scenes/LoveLetter/HelperScenes/sage_select.tscn").instantiate()
+	sageSelect.connect("sage_selected",resolve_sage_play)
+	arr.append_array([guardGuess,sageSelect])
+	return arr
 	
+func end_of_turn():
+	selectedPlayer=null
+	currentGameState=GameState.IDLE
+	emit_signal("turn_ended",cardInPlay,PlayerManager.currentPlayer)
+	emit_signal("perform_transition","Turn ends...")
+	#Simply emulating next turn. Multiplayer will use another logic
+	load_next_player()
+
+func load_next_player():
+	if(PlayerManager.players.size()==1):
+		print("GAME COMPLETED")
+		currentGameState=GameState.ROUND_COMPLETE
+		emit_signal("game_ended",PlayerManager.currentPlayer)
+	else:
+	#await get_tree().create_timer(1.0).timeout
+		currentGameState=GameState.IDLE
+		PlayerManager.update_current_player()
+		emit_signal("perform_transition",str(PlayerManager.currentPlayer)+" 's Turn.")
+		emit_signal("turn_started")
+
 func resolve_guard_play(selectedValue):
 	currentGameState=GameState.RESOLVING
 	print("The game mode got the value : "+str(selectedValue))
@@ -123,23 +154,10 @@ func resolve_guard_play(selectedValue):
 	else:
 		print("Game Continues")
 	#End Turn
+	PlayerManager.currentPlayer.discard_card(cardInPlay)
 	end_of_turn()
 	pass
 	
-func end_of_turn():
-	guardGuess.visible=false
-	selectedPlayer=null
-	currentGameState=GameState.IDLE
-	emit_signal("turn_ended")
-	emit_signal("perform_transition","Turn ends...")
-	#Simply emulating next turn. Multiplayer will use another logic
-	load_next_player()
-
-func load_next_player():
-	emit_signal("turn_started")
-	#await get_tree().create_timer(1.0).timeout
-	currentGameState=GameState.IDLE
-	PlayerManager.update_current_player()
-	emit_signal("perform_transition",str(PlayerManager.currentPlayer)+" 's Turn.")
-
-	
+func resolve_sage_play():
+	currentGameState=GameState.RESOLVING
+	end_of_turn()

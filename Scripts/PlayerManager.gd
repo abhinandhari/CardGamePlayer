@@ -26,7 +26,7 @@ static func create_players(parent:Node,count : int): #Parent is to Circumvent go
 		newPlayer.id=i
 		if(currentPlayer==null):
 			currentPlayer=newPlayer
-		parent.add_child(newPlayer)
+		parent.get_node("Players").add_child(newPlayer)
 		players.append(newPlayer)
 	#position the players
 	setup_player_positions()
@@ -57,9 +57,6 @@ static func deal_to_player(player:Player=currentPlayer, source=DeckManager.deck)
 	player.add_card(card)
 	
 static func update_current_player(currPlayer=currentPlayer):
-	if(players.size()==1):
-		print("GAMEOVER")
-		GameArea.gameMode.game_completed(currentPlayer)
 	var newPlayerId = (players.find(currentPlayer)+1) % players.size()
 	currentPlayer = players[newPlayerId]
 	hide_all_other_players_cards_except(currentPlayer)
@@ -70,8 +67,10 @@ static func 	hide_all_other_players_cards_except(selectedPlayer: Player):
 	for player in players:
 		if(player!=selectedPlayer):
 			player.showCards=false
+			player.disable_icon(true)
 		else:
 			player.showCards=true
+			player.disable_icon(false)
 		player.queue_redraw()
 
 static func deal_to_all_players(cards: int):
@@ -82,7 +81,7 @@ static func deal_to_all_players(cards: int):
 	pass
 	
 static func start_turn():
-	print("Turn of "+str(currentPlayer))
+	print("Turn of "+currentPlayer.displayPlayer())
 	deal_to_player()
 	#TO DO : SHOW VISUAL CHANGES ON PLAYER	
 	
@@ -91,9 +90,9 @@ static func enable_selection(playerList):
 		player.get_node("PlayerIcon").disabled=false
 		print(player)
 	pass
+	
 static func remove_player(selectedPlayer):
+	selectedPlayer.queue_free()
 	players.erase(selectedPlayer)
-	print("size : "+str(players))
-
 	
 	

@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://cqmubmbnexs5m"]
+[gd_scene load_steps=4 format=3 uid="uid://cqmubmbnexs5m"]
 
 [ext_resource type="Script" uid="uid://bch727frshqhy" path="res://Scripts/GameArea.gd" id="1_k0abi"]
 [ext_resource type="PackedScene" uid="uid://dqiquo1e8l1ex" path="res://Scenes/LoveLetter/HelperScenes/transition.tscn" id="2_1i6hu"]
+[ext_resource type="PackedScene" uid="uid://23n2eb50ld2y" path="res://Scenes/discard_pile.tscn" id="2_3x2t2"]
 
 [node name="GameArea" type="Node2D"]
 script = ExtResource("1_k0abi")
@@ -9,21 +10,20 @@ duration = 1.6
 
 [node name="Deck" type="Node2D" parent="."]
 
-[node name="Controls" type="Control" parent="."]
+[node name="Controls" type="CanvasLayer" parent="."]
 visible = false
-layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
 
 [node name="DrawCard" type="Button" parent="Controls"]
-layout_mode = 0
-offset_left = 62.0
-offset_top = 931.0
-offset_right = 246.0
-offset_bottom = 1020.0
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -31.0
+offset_right = 140.0
+grow_vertical = 0
 tooltip_text = "DRAW CARD"
 text = "DRAW CARD"
+
+[node name="DiscardPile" parent="Controls" instance=ExtResource("2_3x2t2")]
 
 [node name="ModeSpecificElements" type="Control" parent="."]
 layout_mode = 3
@@ -42,11 +42,7 @@ grow_vertical = 2
 [node name="Transistion" parent="." instance=ExtResource("2_1i6hu")]
 duration = 3.0
 
-[node name="VBoxContainer" parent="Transistion" index="0"]
-layout_mode = 0
-
-[node name="Sprite2D" parent="Transistion" index="1"]
-visible = false
+[node name="Players" type="Node" parent="."]
 
 [connection signal="pressed" from="Controls/DrawCard" to="." method="_on_draw_card_pressed"]
 

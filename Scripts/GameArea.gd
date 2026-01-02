@@ -11,7 +11,9 @@ var cardGameSize = Vector2(-150,-200)
 
 func _ready() -> void:
 	add_child(gameMode)
-	$ModeSpecificElements.add_child(gameMode.render_ui_elements())
+	var importantUIElements = gameMode.render_ui_elements()
+	for ele in importantUIElements:
+		$ModeSpecificElements.add_child(ele)
 	$Controls/DrawCard.visible=gameMode.drawButtonNeeded
 	staticCenterOfScreen=centerOfScreen-gameMode.cardSizeOffset
 	tween=create_tween()
@@ -22,21 +24,12 @@ func _ready() -> void:
 	$Controls.visible=true
 	gameMode.card_game_start() #needs refinement.
 	
-	
 func create_deck(gameMode:AbstractGameMode)->void:
 	deck = DeckManager.createCardsForGameMode(gameMode)
 	deck.shuffle()
 	for card in deck:
 		$Deck.add_child(card)
 		startupDeckAnimation(card)
-
-#func create_players(count:int)->void:	
-	#for i in range(count):
-		#var newPlayer = Player.new()
-		#newPlayer.set_id(i+1)
-		#PlayerManager.add_players(newPlayer)
-		#add_child(newPlayer)
-	#pass
 	
 #	Preferably, this gets handled elsewhere . for now keeping it here
 func startupDeckAnimation(child):
@@ -58,3 +51,8 @@ func _on_draw_card_pressed() -> void:
 
 static func get_game_mode():
 	return gameMode
+
+
+func _on_test_pressed() -> void:
+	print("TEST WORKED")
+	pass # Replace with function body.
