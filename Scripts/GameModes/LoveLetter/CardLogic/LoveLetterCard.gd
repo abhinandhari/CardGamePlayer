@@ -64,6 +64,8 @@ func setCardProperties(displayText:String,pow:int):
 func play_card()-> void :
 	super()
 	cardState=CardState.IN_PLAY
+	emit_signal("perform_transition","SELECT PLAYER...",true)
+	#BY DEFAULT, ALL CARDS SELECT. Edge cases need to be checked.
 	print("Card is in play.")
 	pass
 

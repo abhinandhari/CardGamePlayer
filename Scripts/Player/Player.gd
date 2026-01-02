@@ -9,7 +9,7 @@ var showCards: bool:
 		for card in hand:
 			card.make_visible(value)
 var highlight=false
-
+var protected
 signal player_selected(player)
 signal send_to_discard_pile(card,player)
 
@@ -20,6 +20,7 @@ func _ready() -> void:
 	playerIcon.texture_normal=load("res://Sprites/"+GameArea.get_game_mode().gameModeName+"/PlayerSprites/player"+str(id+1)+".png")
 	GameArea.get_game_mode().connect("turn_ended",_on_turn_end)
 	GameArea.get_game_mode().connect("turn_started",_on_turn_start)
+	protected=false
 	queue_redraw()
 		
 func add_card(card):
@@ -60,7 +61,6 @@ func make_details_visible():
 	$UIPlayerDetails.visible=true
 	queue_redraw()
 	
-	
 func update_details():
 	var detailBox = get_node("UIPlayerDetails/DetailBox")
 	detailBox.get_node("CardCount").text=str(hand.size())
@@ -68,21 +68,22 @@ func update_details():
 func _on_player_icon_pressed() -> void:
 	print(str(id)+"PRESSED!")
 	emit_signal("player_selected",self)
-	#player_selected.emit(self)
 	pass # Replace with function body.
 	
 func _draw():
-	if highlight:
-		draw_rect(Rect2(Vector2.ZERO, $PlayerIcon.size), Color.YELLOW, false, 25)
-	if(self==PlayerManager.currentPlayer):
-		draw_rect(Rect2(Vector2.ZERO, $PlayerIcon.size), Color.GREEN, false, 20)
+	if protected:
+		draw_rect(Rect2(Vector2.ZERO, $PlayerIcon.size), Color.RED, false, 50)		
+	else:
+		if highlight:
+			draw_rect(Rect2(Vector2.ZERO, $PlayerIcon.size), Color.YELLOW, false, 25)
+		if(self==PlayerManager.currentPlayer):
+			draw_rect(Rect2(Vector2.ZERO, $PlayerIcon.size), Color.GREEN, false, 20)
 		
 func _on_turn_end(card,player):
-	print("TURN END REACHED PLAYER?")
 	if(self==player):
 		print("Discard from player : "+str(card))
 		hand.erase(card)
-		emit_signal("send_to_discard_pile",card.duplicate(),self)
+		emit_signal("card_discarded",card.duplicate(),self)
 		card.queue_free()
 	arrange_cards()
 	#Disable clicks
@@ -90,10 +91,15 @@ func _on_turn_end(card,player):
 
 func _on_turn_start(): 
 	print("Turn Start send to "+str(id))
-	#$PlayerIcon.disabled=false	
+	if(self==PlayerManager.currentPlayer):
+		$PlayerIcon.disabled=false
+		protected=false	
 		
 func _on_playing_card(card,player):
 	print("Card is Played")
+	if(card.cardType==LoveLetterMode.CardType.HANDMAID):
+		player.protected=true
+		print("Protecting Player")
 	
 func discard_card(card):
 	pass

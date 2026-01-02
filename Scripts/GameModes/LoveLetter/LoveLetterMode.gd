@@ -26,10 +26,11 @@ func _init() -> void:
 	drawButtonNeeded=true
 	
 var selectedPlayer #VARIABLE WHICH SHOULD BE STORING SELECTED PLAYER.
-var guardGuess #UI ELEMENT CREATED ON GUARD PLAY
-var sageSelect #UI ELEMENT CREATED ON SAGE PLAY
-	
+
+var uiElements =[]
+
 signal sage_card(card)
+signal baron_card(losingPlayer)
 
 func create_deck(rules="DEFAULT"):
 	var deck :Array[AbstractCard]=[]
@@ -38,7 +39,7 @@ func create_deck(rules="DEFAULT"):
 		card=load_up_card_scene().initialize(1) #Guards
 		deck.append(card) 
 		pass
-	for i in range(2):
+	for i in range(5):
 		deck.append(load_up_card_scene().initialize(2)) 
 		deck.append(load_up_card_scene().initialize(3)) 
 		deck.append(load_up_card_scene().initialize(4)) 
@@ -46,15 +47,14 @@ func create_deck(rules="DEFAULT"):
 		pass
 	deck.append(load_up_card_scene().initialize(6)) 
 	deck.append(load_up_card_scene().initialize(7)) 
-	deck.append(load_up_card_scene().initialize(8)) 
+	deck.append(load_up_card_scene().initialize(8))
+	pass 
 	connect_card_signals(deck)
 	return deck
 	
 func connect_card_signals(deck):
 	for card in deck:
 		card.connect("playing_card", _on_playing_card)
-
-
 	
 func card_game_start():
 	PlayerManager.deal_to_all_players(1)
@@ -62,17 +62,25 @@ func card_game_start():
 	for player in PlayerManager.players:
 		player.connect("player_selected",_on_player_selected)
 	print(PlayerManager.players)
+	emit_signal("perform_transition","Turn of : " + PlayerManager.currentPlayer.displayPlayer(),true)
 	pass
 	
 func _on_playing_card(cardPlayed,player):
 	print("Requesting playing card ->"+str(cardPlayed))
+	cardInPlay=cardPlayed
+	if(cardPlayed.cardType==CardType.HANDMAID):
+		player.protected=true
+		#resolve_maid_play()
+		return
 	currentGameState=GameState.WAITING_FOR_TARGET
 	highlight_valid_players(cardPlayed.cardType)
-	cardInPlay=cardPlayed
 					
 func highlight_valid_players(cardType):
 	print("Highlighting valid players")
-	var collection = PlayerManager.players
+	var collection = PlayerManager.players.duplicate()
+	for player in collection:
+		if(player.protected):
+			collection.erase(player)
 	PlayerManager.enable_selection(collection)
 	pass
 	
@@ -89,8 +97,12 @@ func _on_player_selected(selectedPlayer:Player):
 func perform_action_to_player(destinationPlayer=selectedPlayer,sourcePlayer=PlayerManager.currentPlayer):
 	var ui_element = get_parent().get_node(UI_COMPONENTS_NODE)
 	#ui_element.get_node("GuardGuess").visible=true
-	ui_element.get_node("SageSelect").visible=true
-	emit_signal("sage_card",destinationPlayer)
+	#ui_element.get_node("SageSelect").visible=true
+	#emit_signal("sage_card",destinationPlayer)
+	#
+	#ui_element.get_node("BaronFight").visible=true
+	#emit_signal("baron_card",sourcePlayer,destinationPlayer)
+	
 	match cardInPlay.cardType:
 		CardType.GUARD:
 			#ui_element.get_node("GuardGuess").visible=true
@@ -115,19 +127,20 @@ func perform_action_to_player(destinationPlayer=selectedPlayer,sourcePlayer=Play
 	pass
 	
 func render_ui_elements():
-	var arr=[]
-	guardGuess = load("res://Scenes/LoveLetter/HelperScenes/guard_guess.tscn").instantiate()
-	guardGuess.connect("guard_guess_selected",resolve_guard_play)
-	sageSelect = load("res://Scenes/LoveLetter/HelperScenes/sage_select.tscn").instantiate()
-	sageSelect.connect("sage_selected",resolve_sage_play)
-	arr.append_array([guardGuess,sageSelect])
-	return arr
+	uiElements.append(load("res://Scenes/LoveLetter/HelperScenes/guard_guess.tscn").instantiate())
+	uiElements.get(CardType.GUARD).connect("guard_guess_selected",resolve_guard_play)
+	uiElements.append(load("res://Scenes/LoveLetter/HelperScenes/sage_select.tscn").instantiate())
+	uiElements.get(CardType.SAGE).connect("sage_selected",resolve_sage_play)
+	uiElements.append(load("res://Scenes/LoveLetter/HelperScenes/baron_fight.tscn").instantiate())
+	uiElements.get(CardType.BARON).connect("baron_selected",resolve_baron_play)
+	return uiElements
 	
 func end_of_turn():
 	selectedPlayer=null
 	currentGameState=GameState.IDLE
+	await get_tree().create_timer(2).timeout
 	emit_signal("turn_ended",cardInPlay,PlayerManager.currentPlayer)
-	emit_signal("perform_transition","Turn ends...")
+	emit_signal("perform_transition","Turn ends...",false)
 	#Simply emulating next turn. Multiplayer will use another logic
 	load_next_player()
 
@@ -140,9 +153,9 @@ func load_next_player():
 	#await get_tree().create_timer(1.0).timeout
 		currentGameState=GameState.IDLE
 		PlayerManager.update_current_player()
-		emit_signal("perform_transition",str(PlayerManager.currentPlayer)+" 's Turn.")
+		emit_signal("perform_transition","Turn of : " + PlayerManager.currentPlayer.displayPlayer(),true)
 		emit_signal("turn_started")
-
+	
 func resolve_guard_play(selectedValue):
 	currentGameState=GameState.RESOLVING
 	print("The game mode got the value : "+str(selectedValue))
@@ -160,4 +173,18 @@ func resolve_guard_play(selectedValue):
 	
 func resolve_sage_play():
 	currentGameState=GameState.RESOLVING
+	end_of_turn()
+	
+func resolve_baron_play(losingPlayer):
+	currentGameState=GameState.RESOLVING
+	if(losingPlayer==null):
+		emit_signal("perform_transition","No one lost...",false)
+	else:
+		emit_signal("perform_transition",losingPlayer.displayPlayer()+"lost...",false)
+		PlayerManager.remove_player(losingPlayer)
+	end_of_turn()
+	
+func resolve_maid_play():
+	emit_signal("perform_transition",PlayerManager.currentPlayer.displayPlayer()+" is now protected...",false)
+	print("RESOLVED")
 	end_of_turn()

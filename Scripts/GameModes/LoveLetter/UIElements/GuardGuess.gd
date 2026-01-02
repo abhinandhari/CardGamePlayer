@@ -4,7 +4,9 @@ signal guard_guess_selected(value)
 
 func _ready() -> void:
 	GameArea.get_game_mode().connect("turn_ended",_on_turn_end)
-	
+
+func _on_turn_end(card,player):
+	get_node(".").visible=false
 	
 func _on_select_pressed() -> void:
 	var node = get_node("Panel/VBoxContainer/OptionButton")
@@ -16,8 +18,7 @@ func _on_select_pressed() -> void:
 #Enable select only after selecting the card
 func _on_option_button_item_selected(index: int) -> void:
 	$Panel/VBoxContainer/Select.disabled=false
+	get_node(".").visible=false
 	pass # Replace with function body.
 
-func _on_turn_end(card,player):
-	get_node(".").visible=false
 # Replace with function body.

@@ -1,0 +1,24 @@
+[gd_scene load_steps=2 format=3 uid="uid://du2pma0rl8i5s"]
+
+[ext_resource type="Script" uid="uid://ck2mv5cmbl4po" path="res://Scripts/GameModes/LoveLetter/UIElements/BaronFight.gd" id="1_g6kao"]
+
+[node name="BaronFight" type="Control"]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = -150.0
+offset_right = 150.0
+offset_bottom = 150.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_g6kao")
+
+[node name="Label" type="Label" parent="."]
+custom_minimum_size = Vector2(100, 20)
+layout_mode = 0
+offset_right = 100.0
+offset_bottom = 85.0
