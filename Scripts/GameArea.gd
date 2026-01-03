@@ -20,6 +20,7 @@ func _ready() -> void:
 	print("Game Mode "+ gameMode.gameModeName+" launching with "+str(playerCount)+" players.")
 	PlayerManager.create_players(self,playerCount)
 	create_deck(gameMode)
+	gameMode.setup_discard_pile($Controls/DiscardPile)
 	await tween.finished
 	$Controls.visible=true
 	gameMode.card_game_start() #needs refinement.

@@ -64,8 +64,8 @@ func set_card_size(sprite: TextureRect, target_size := Vector2(300, 400)):
 	
 func make_visible( front : bool=true):
 	get_node("ImageDetails").disabled=!front
-	#get_node("ImageDetails/Art").visible=front
-	#get_node("ImageDetails/Back").visible=!front
+	get_node("ImageDetails/Art").visible=front
+	get_node("ImageDetails/Back").visible=!front
 	return
 		
 func scale_to(target_scale:Vector2=_scale):

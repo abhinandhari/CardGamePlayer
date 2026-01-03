@@ -13,6 +13,7 @@ func _on_select_pressed() -> void:
 	#-1 for enum support
 	emit_signal("guard_guess_selected",node.get_item_id(node.selected) - 1)
 	$Panel/VBoxContainer/OptionButton.select(-1)
+	$Panel/VBoxContainer/Select.disabled=true
 	get_node(".").visible=false
 	pass # Replace with function body.
 

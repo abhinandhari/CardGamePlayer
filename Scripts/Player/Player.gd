@@ -84,7 +84,6 @@ func _on_turn_end(card,player):
 		print("Discard from player : "+str(card))
 		print(emit_signal("card_discarded",card,self))
 		hand.erase(card)
-		card.queue_free()
 	arrange_cards()
 	#Disable clicks
 	#$PlayerIcon.disabled=true	

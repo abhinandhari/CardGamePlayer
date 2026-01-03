@@ -26,6 +26,7 @@ func _init() -> void:
 	cardSizeOffset=Vector2(25,50)
 	currentGameState=GameState.IDLE
 	drawButtonNeeded=true
+	requiresPlayerNames=true
 	
 var selectedPlayer #VARIABLE WHICH SHOULD BE STORING SELECTED PLAYER.
 
@@ -63,7 +64,8 @@ func card_game_start():
 	print(PlayerManager.players)
 	emit_signal("perform_transition","Turn of : " + PlayerManager.currentPlayer.displayPlayer(),true)
 	pass
-	
+
+
 func _on_playing_card(cardPlayed,player):
 	print("Requesting playing card ->"+str(cardPlayed))
 	cardInPlay=cardPlayed
@@ -100,7 +102,7 @@ func _on_player_selected(selectedPlayer:Player):
 func perform_action_to_player(destinationPlayer=selectedPlayer,sourcePlayer=PlayerManager.currentPlayer):
 	var ui_element = get_parent().get_node(UI_COMPONENTS_NODE)
 
-	#ui_element.get_node("GuardGuess").visible=true
+	ui_element.get_node("GuardGuess").visible=true
 	
 	#ui_element.get_node("SageSelect").visible=true
 	#emit_signal("sage_card",destinationPlayer)
@@ -196,8 +198,3 @@ func resolve_maid_play():
 	emit_signal("perform_transition",PlayerManager.currentPlayer.displayPlayer()+" is now protected...",false)
 	print("RESOLVED")
 	end_of_turn()
-
-func _on_player_discard(card,player):
-	print("TTT Discard signal reached")
-	#$Controls/DiscardPile.add_to_pile(card,player)
-	pass
