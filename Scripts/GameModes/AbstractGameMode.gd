@@ -60,7 +60,7 @@ func game_completed(winnerPlayer:Player):
 	
 func connect_card_signals(deck):
 	for card in deck:
-		card.connect("playing_card", _on_playing_card)
+		card.playing_card.connect(_on_playing_card)
 	
 func connect_player_signals(players):
 	for player in players:

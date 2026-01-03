@@ -59,7 +59,7 @@ func card_game_start():
 	PlayerManager.deal_to_all_players(1)
 	PlayerManager.start_turn()
 	for player in PlayerManager.players:
-		player.connect("player_selected",_on_player_selected)
+		player.player_selected.connect(_on_player_selected)
 	print(PlayerManager.players)
 	emit_signal("perform_transition","Turn of : " + PlayerManager.currentPlayer.displayPlayer(),true)
 	pass
@@ -133,11 +133,11 @@ func perform_action_to_player(destinationPlayer=selectedPlayer,sourcePlayer=Play
 	
 func render_ui_elements():
 	uiElements.append(load("res://Scenes/LoveLetter/HelperScenes/guard_guess.tscn").instantiate())
-	uiElements.get(CardType.GUARD).connect("guard_guess_selected",resolve_guard_play)
+	uiElements.get(CardType.GUARD).guard_guess_selected.connect(resolve_guard_play)
 	uiElements.append(load("res://Scenes/LoveLetter/HelperScenes/sage_select.tscn").instantiate())
-	uiElements.get(CardType.SAGE).connect("sage_selected",resolve_sage_play)
+	uiElements.get(CardType.SAGE).sage_selected.connect(resolve_sage_play)
 	uiElements.append(load("res://Scenes/LoveLetter/HelperScenes/baron_fight.tscn").instantiate())
-	uiElements.get(CardType.BARON).connect("baron_selected",resolve_baron_play)
+	uiElements.get(CardType.BARON).baron_selected.connect(resolve_baron_play)
 	return uiElements
 	
 func end_of_turn():

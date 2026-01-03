@@ -8,8 +8,8 @@ signal game_ended(player)
 func _ready() -> void:
 	var gm = GameArea.get_game_mode()
 	if gm:
-		GameArea.get_game_mode().connect("perform_transition",_perform_transition)
-		GameArea.get_game_mode().connect("game_ended",_game_complete)
+		GameArea.get_game_mode().perform_transition.connect(_perform_transition)
+		GameArea.get_game_mode().game_ended.connect(_game_complete)
 	else:
 		print("NO GM")
 	print("Parent above, GM below")

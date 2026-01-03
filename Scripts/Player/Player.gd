@@ -19,8 +19,8 @@ func _ready() -> void:
 	var playerIcon :TextureButton = get_node("PlayerIcon")
 	print("res://Sprites/"+GameArea.get_game_mode().gameModeName+"/PlayerSprites/player"+str(id))
 	playerIcon.texture_normal=load("res://Sprites/"+GameArea.get_game_mode().gameModeName+"/PlayerSprites/player"+str(id+1)+".png")
-	GameArea.get_game_mode().connect("turn_ended",_on_turn_end)
-	GameArea.get_game_mode().connect("turn_started",_on_turn_start)
+	GameArea.get_game_mode().turn_ended.connect(_on_turn_end)
+	GameArea.get_game_mode().turn_started.connect(_on_turn_start)
 	protected=false
 	queue_redraw()
 		
@@ -28,11 +28,10 @@ func add_card(card):
 	#card.position=Vector2(120 + scaler*hand.size(),120)
 	card.make_visible(showCards)
 	hand.append(card)
-	card.connect("card_played", Callable(self, "_on_card_selected"))
 	update_details()
 	print("Player "+str(id)+" : "+str(hand))
 	#print("Main Deck : " + str(DeckManager.deck))
-	card.connect("playing_card",_on_playing_card)
+	card.playing_card.connect(_on_playing_card)
 	add_child(card)
 	arrange_cards()
 		
