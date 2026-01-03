@@ -13,12 +13,12 @@ func _on_select_pressed() -> void:
 	#-1 for enum support
 	emit_signal("guard_guess_selected",node.get_item_id(node.selected) - 1)
 	$Panel/VBoxContainer/OptionButton.select(-1)
+	get_node(".").visible=false
 	pass # Replace with function body.
 
 #Enable select only after selecting the card
 func _on_option_button_item_selected(index: int) -> void:
 	$Panel/VBoxContainer/Select.disabled=false
-	get_node(".").visible=false
 	pass # Replace with function body.
 
 # Replace with function body.

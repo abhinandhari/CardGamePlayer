@@ -10,8 +10,9 @@ var showCards: bool:
 			card.make_visible(value)
 var highlight=false
 var protected
+
 signal player_selected(player)
-signal send_to_discard_pile(card,player)
+signal card_discarded(card,player)
 
 func _ready() -> void:
 	print("Created Player : "+str(id))
@@ -82,8 +83,8 @@ func _draw():
 func _on_turn_end(card,player):
 	if(self==player):
 		print("Discard from player : "+str(card))
+		print(emit_signal("card_discarded",card,self))
 		hand.erase(card)
-		emit_signal("card_discarded",card.duplicate(),self)
 		card.queue_free()
 	arrange_cards()
 	#Disable clicks
@@ -100,9 +101,6 @@ func _on_playing_card(card,player):
 	if(card.cardType==LoveLetterMode.CardType.HANDMAID):
 		player.protected=true
 		print("Protecting Player")
-	
-func discard_card(card):
-	pass
 	
 func disable_icon(x:bool=true):
 	$PlayerIcon.disabled=x

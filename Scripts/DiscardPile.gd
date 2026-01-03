@@ -4,16 +4,14 @@ var isVisible=true
 @export var requiresPlayerNames:bool =false
 
 func _ready() -> void:
-	for player in PlayerManager.players:
-		player.connect("card_discarded",_add_to_pile)
 	pass
-	
+
 func _on_view_discard_pile_pressed() -> void:
 	$DiscardContainer.visible=isVisible
 	isVisible=!isVisible
 	pass # Replace with function body.
 
-func _add_to_pile(card,player):
+func add_to_pile(card,player):
 	print("TTT Reached Here")
 	var playerNamesNode = $DiscardContainer/VBoxContainer
 	var nodeToAddValues = $DiscardContainer/VBoxContainer/AllCards

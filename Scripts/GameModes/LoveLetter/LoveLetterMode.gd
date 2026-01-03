@@ -10,12 +10,14 @@ enum CardType {
 	QUEEN,
 	PRINCESS
 }
+
 enum GameState{
 	IDLE,
 	WAITING_FOR_TARGET,
 	RESOLVING,
 	ROUND_COMPLETE
 }
+
 func _init() -> void:
 	gameModeName="LoveLetter"
 	minPlayerCount=2
@@ -50,12 +52,9 @@ func create_deck(rules="DEFAULT"):
 	deck.append(load_up_card_scene().initialize(8))
 	pass 
 	connect_card_signals(deck)
+	connect_player_signals(PlayerManager.players)
 	return deck
-	
-func connect_card_signals(deck):
-	for card in deck:
-		card.connect("playing_card", _on_playing_card)
-	
+		
 func card_game_start():
 	PlayerManager.deal_to_all_players(1)
 	PlayerManager.start_turn()
@@ -70,7 +69,7 @@ func _on_playing_card(cardPlayed,player):
 	cardInPlay=cardPlayed
 	if(cardPlayed.cardType==CardType.HANDMAID):
 		player.protected=true
-		#resolve_maid_play()
+		resolve_maid_play()
 		return
 	currentGameState=GameState.WAITING_FOR_TARGET
 	highlight_valid_players(cardPlayed.cardType)
@@ -81,7 +80,11 @@ func highlight_valid_players(cardType):
 	for player in collection:
 		if(player.protected):
 			collection.erase(player)
-	PlayerManager.enable_selection(collection)
+	if(collection.size()==1):
+		emit_signal("perform_transition","Unable to choose anyone...",false)
+		end_of_turn()
+	else:
+		PlayerManager.enable_selection(collection)
 	pass
 	
 func _on_player_selected(selectedPlayer:Player):
@@ -96,10 +99,12 @@ func _on_player_selected(selectedPlayer:Player):
 		
 func perform_action_to_player(destinationPlayer=selectedPlayer,sourcePlayer=PlayerManager.currentPlayer):
 	var ui_element = get_parent().get_node(UI_COMPONENTS_NODE)
+
 	#ui_element.get_node("GuardGuess").visible=true
+	
 	#ui_element.get_node("SageSelect").visible=true
 	#emit_signal("sage_card",destinationPlayer)
-	#
+	
 	#ui_element.get_node("BaronFight").visible=true
 	#emit_signal("baron_card",sourcePlayer,destinationPlayer)
 	
@@ -136,14 +141,18 @@ func render_ui_elements():
 	return uiElements
 	
 func end_of_turn():
-	selectedPlayer=null
-	currentGameState=GameState.IDLE
 	await get_tree().create_timer(2).timeout
 	emit_signal("turn_ended",cardInPlay,PlayerManager.currentPlayer)
 	emit_signal("perform_transition","Turn ends...",false)
+	reset_for_new_turn()
 	#Simply emulating next turn. Multiplayer will use another logic
 	load_next_player()
 
+func reset_for_new_turn():
+	cardInPlay=null
+	selectedPlayer=null
+	currentGameState=GameState.IDLE
+	
 func load_next_player():
 	if(PlayerManager.players.size()==1):
 		print("GAME COMPLETED")
@@ -167,7 +176,6 @@ func resolve_guard_play(selectedValue):
 	else:
 		print("Game Continues")
 	#End Turn
-	PlayerManager.currentPlayer.discard_card(cardInPlay)
 	end_of_turn()
 	pass
 	
@@ -188,3 +196,8 @@ func resolve_maid_play():
 	emit_signal("perform_transition",PlayerManager.currentPlayer.displayPlayer()+" is now protected...",false)
 	print("RESOLVED")
 	end_of_turn()
+
+func _on_player_discard(card,player):
+	print("TTT Discard signal reached")
+	#$Controls/DiscardPile.add_to_pile(card,player)
+	pass

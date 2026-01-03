@@ -7,20 +7,23 @@ class_name AbstractGameMode extends Node
 @export var description:String
 @export var startingCardCount:int
 @export var drawButtonNeeded :bool= true 
+
 var currentGameState
 var cardInPlay
+var transitionNode = load("res://Scenes/LoveLetter/HelperScenes/transition.tscn").instantiate()
+
 const CARD_SCENE_PATH = "res://Scenes/card.tscn"
 const CARD_SCRIPT_PATH = "res://Scripts/GameModes/***/CardLogic/***Card.gd"
 const UI_COMPONENTS_NODE = "ModeSpecificElements"
-var transitionNode = load("res://Scenes/LoveLetter/HelperScenes/transition.tscn").instantiate()
-static var cardSizeOffset =Vector2.ZERO
 
+static var cardSizeOffset =Vector2.ZERO
 
 signal perform_transition(text)
 signal game_ended(player)
 signal turn_started
 signal turn_ended(card,player)
-
+signal card_discarded(card, player)
+		
 func create_deck(rules:String="DEFAULT") -> Array[AbstractCard]:
 	push_error("create_deck not implemented")
 	return []
@@ -55,3 +58,17 @@ func game_completed(winnerPlayer:Player):
 	emit_signal("game_ended",winnerPlayer)
 	pass
 	
+func connect_card_signals(deck):
+	for card in deck:
+		card.connect("playing_card", _on_playing_card)
+	
+func connect_player_signals(players):
+	for player in players:
+		player.card_discarded.connect(_on_player_discard)
+			
+func _on_player_discard(card,player):
+	$Controls/DiscardPile.add_to_pile(card,player)
+	pass
+	
+func _on_playing_card(cardPlayed,player):
+	print("Requesting playing card ->"+str(cardPlayed))

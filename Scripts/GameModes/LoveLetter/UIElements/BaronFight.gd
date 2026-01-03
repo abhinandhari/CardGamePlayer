@@ -3,8 +3,8 @@ extends Control
 signal baron_selected(losingPlayer)
 
 func _ready():
-	GameArea.get_game_mode().connect("turn_ended",_on_turn_end)
-	GameArea.get_game_mode().connect("baron_card",on_card_fight)
+	GameArea.get_game_mode().turn_ended.connect(_on_turn_end)
+	GameArea.get_game_mode().baron_card.connect(on_card_fight)
 	
 func _on_turn_end(card,player):
 	get_node(".").visible=false
