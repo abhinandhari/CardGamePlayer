@@ -69,21 +69,22 @@ func make_visible( front : bool=true):
 	return
 		
 func scale_to(target_scale:Vector2=_scale):
-	if _tween and _tween.is_running():
-		_tween.kill()
-	_tween = create_tween()
-	_tween.tween_property(
-		self,
-		"scale",
-		target_scale,
-		tween_duration
-	).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)			
-	if(target_scale>_scale):
-		z_index=5
-		_tween.parallel().tween_property(self, "position", 200*Vector2.UP, tween_duration)
-	else:
-		z_index=0
-		_tween.parallel().tween_property(self, "position", _position, tween_duration)
+	if(get_parent() is Player):
+		if _tween and _tween.is_running():
+			_tween.kill()
+		_tween = create_tween()
+		_tween.tween_property(
+			self,
+			"scale",
+			target_scale,
+			tween_duration
+		).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)			
+		if(target_scale>_scale):
+			z_index=5
+			_tween.parallel().tween_property(self, "position", 200*Vector2.UP, tween_duration)
+		else:
+			z_index=0
+			_tween.parallel().tween_property(self, "position", _position, tween_duration)
 		
 
 func _on_image_details_mouse_entered() -> void:

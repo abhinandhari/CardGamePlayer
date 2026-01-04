@@ -70,8 +70,7 @@ func _on_playing_card(cardPlayed,player):
 	print("Requesting playing card ->"+str(cardPlayed))
 	cardInPlay=cardPlayed
 	if(cardPlayed.cardType==CardType.HANDMAID):
-		player.protected=true
-		resolve_maid_play()
+		resolve_maid_play(player)
 		return
 	currentGameState=GameState.WAITING_FOR_TARGET
 	highlight_valid_players(cardPlayed.cardType)
@@ -102,14 +101,14 @@ func _on_player_selected(selectedPlayer:Player):
 func perform_action_to_player(destinationPlayer=selectedPlayer,sourcePlayer=PlayerManager.currentPlayer):
 	var ui_element = get_parent().get_node(UI_COMPONENTS_NODE)
 
-	ui_element.get_node("GuardGuess").visible=true
+	#ui_element.get_node("GuardGuess").visible=true
 	
 	#ui_element.get_node("SageSelect").visible=true
 	#emit_signal("sage_card",destinationPlayer)
 	
 	#ui_element.get_node("BaronFight").visible=true
 	#emit_signal("baron_card",sourcePlayer,destinationPlayer)
-	
+	resolve_prince_play(selectedPlayer)
 	match cardInPlay.cardType:
 		CardType.GUARD:
 			#ui_element.get_node("GuardGuess").visible=true
@@ -194,7 +193,14 @@ func resolve_baron_play(losingPlayer):
 		PlayerManager.remove_player(losingPlayer)
 	end_of_turn()
 	
-func resolve_maid_play():
+func resolve_maid_play(player):
+	player.protected=true
 	emit_signal("perform_transition",PlayerManager.currentPlayer.displayPlayer()+" is now protected...",false)
 	print("RESOLVED")
 	end_of_turn()
+	
+func resolve_prince_play(player:Player):
+	player.discard_card(player.hand.get(0))
+	PlayerManager.deal_to_player(player)
+	end_of_turn()
+	pass

@@ -81,12 +81,15 @@ func _draw():
 		
 func _on_turn_end(card,player):
 	if(self==player):
-		print("Discard from player : "+str(card))
-		print(emit_signal("card_discarded",card,self))
-		hand.erase(card)
-	arrange_cards()
+		discard_card(card)
 	#Disable clicks
 	#$PlayerIcon.disabled=true	
+	
+func discard_card(card):
+	print("Discard from player : "+str(card))
+	print(emit_signal("card_discarded",card,self))
+	hand.erase(card)
+	arrange_cards()
 
 func _on_turn_start(): 
 	print("Turn Start send to "+str(id))

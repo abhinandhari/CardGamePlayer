@@ -24,8 +24,9 @@ func _on_view_discard_pile_pressed() -> void:
 	isVisible=!isVisible
 	pass # Replace with function body.
 
-func add_to_pile(card,player):
+func add_to_pile(card:AbstractCard,player):
 	#WRAPPER CREATED AS CARD IS A NODE, NOT A CONTROL
+	card.make_visible(true)
 	var wrapper := Control.new()
 	wrapper.custom_minimum_size = Vector2(50, 100)
 	wrapper.size_flags_horizontal = Control.SIZE_EXPAND_FILL
