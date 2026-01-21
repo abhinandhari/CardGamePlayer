@@ -35,5 +35,4 @@ func add_to_pile(card:AbstractCard,player):
 	card.reparent(wrapper)
 	card.position=wrapper.size/2
 	card.position.y-=40
-	print_tree_pretty()
 	pass

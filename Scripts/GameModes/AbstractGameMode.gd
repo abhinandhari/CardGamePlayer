@@ -15,7 +15,7 @@ var requiresPlayerNames = false
 const CARD_SCENE_PATH = "res://Scenes/card.tscn"
 const CARD_SCRIPT_PATH = "res://Scripts/GameModes/***/CardLogic/***Card.gd"
 const UI_COMPONENTS_NODE = "ModeSpecificElements"
-
+var gameModeComponents:Dictionary
 static var cardSizeOffset =Vector2.ZERO
 
 signal perform_transition(text)

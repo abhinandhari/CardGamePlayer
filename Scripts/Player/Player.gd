@@ -9,7 +9,8 @@ var showCards: bool:
 		for card in hand:
 			card.make_visible(value)
 var highlight=false
-var protected
+var gameComponents:Dictionary
+
 
 signal player_selected(player)
 signal card_discarded(card,player)
@@ -21,7 +22,7 @@ func _ready() -> void:
 	playerIcon.texture_normal=load("res://Sprites/"+GameArea.get_game_mode().gameModeName+"/PlayerSprites/player"+str(id+1)+".png")
 	GameArea.get_game_mode().turn_ended.connect(_on_turn_end)
 	GameArea.get_game_mode().turn_started.connect(_on_turn_start)
-	protected=false
+	gameComponents = GameArea.get_game_mode().gameModeComponents.duplicate()
 	queue_redraw()
 		
 func add_card(card):
@@ -71,9 +72,6 @@ func _on_player_icon_pressed() -> void:
 	pass # Replace with function body.
 	
 func _draw():
-	if protected:
-		draw_rect(Rect2(Vector2.ZERO, $PlayerIcon.size), Color.RED, false, 50)		
-	else:
 		if highlight:
 			draw_rect(Rect2(Vector2.ZERO, $PlayerIcon.size), Color.YELLOW, false, 25)
 		if(self==PlayerManager.currentPlayer):
@@ -92,18 +90,16 @@ func discard_card(card):
 	arrange_cards()
 
 func _on_turn_start(): 
-	print("Turn Start send to "+str(id))
-	if(self==PlayerManager.currentPlayer):
-		$PlayerIcon.disabled=false
-		protected=false	
+	print("Turn Start send to "+displayPlayer())
+	#if(self==PlayerManager.currentPlayer):
+		#$PlayerIcon.disabled=false
+		#print("TTT Protection ended "+str(PlayerManager.currentPlayer.displayPlayer()))
 		
 func _on_playing_card(card,player):
-	print("Card is Played")
-	if(card.cardType==LoveLetterMode.CardType.HANDMAID):
-		player.protected=true
-		print("Protecting Player")
+	print(str(card) + " Card is Played by "+player.displayPlayer())
 	
 func disable_icon(x:bool=true):
+	print(displayPlayer() +"is disabled??? "+str(x))
 	$PlayerIcon.disabled=x
 
 func arrange_cards():

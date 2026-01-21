@@ -27,6 +27,7 @@ func _init() -> void:
 	currentGameState=GameState.IDLE
 	drawButtonNeeded=true
 	requiresPlayerNames=true
+	gameModeComponents={"protected":false}
 	
 var selectedPlayer #VARIABLE WHICH SHOULD BE STORING SELECTED PLAYER.
 
@@ -38,19 +39,25 @@ signal baron_card(losingPlayer)
 func create_deck(rules="DEFAULT"):
 	var deck :Array[AbstractCard]=[]
 	var card
-	for i in range(5):
-		card=load_up_card_scene().initialize(1) #Guards
-		deck.append(card) 
-		pass
-	for i in range(5):
-		deck.append(load_up_card_scene().initialize(2)) 
-		deck.append(load_up_card_scene().initialize(3)) 
-		deck.append(load_up_card_scene().initialize(4)) 
-		deck.append(load_up_card_scene().initialize(5)) 
-		pass
-	deck.append(load_up_card_scene().initialize(6)) 
-	deck.append(load_up_card_scene().initialize(7)) 
-	deck.append(load_up_card_scene().initialize(8))
+	#for i in range(5):
+		#card=load_up_card_scene().initialize(1) #Guards
+		#deck.append(card) 
+		#pass
+	#for i in range(5):
+		#deck.append(load_up_card_scene().initialize(2)) 
+		#deck.append(load_up_card_scene().initialize(3)) 
+		#deck.append(load_up_card_scene().initialize(4)) 
+		#deck.append(load_up_card_scene().initialize(5)) 
+		#pass
+	#deck.append(load_up_card_scene().initialize(6)) 
+	#deck.append(load_up_card_scene().initialize(7)) 
+	#deck.append(load_up_card_scene().initialize(8))
+	for i in range(8):
+		deck.append(load_up_card_scene().initialize(4))
+	deck.append(load_up_card_scene().initialize(1))
+	deck.append(load_up_card_scene().initialize(1))
+	deck.append(load_up_card_scene().initialize(1))
+
 	pass 
 	connect_card_signals(deck)
 	connect_player_signals(PlayerManager.players)
@@ -67,10 +74,12 @@ func card_game_start():
 
 
 func _on_playing_card(cardPlayed,player):
+	if(player!=PlayerManager.currentPlayer):
+		return
 	print("Requesting playing card ->"+str(cardPlayed))
 	cardInPlay=cardPlayed
 	if(cardPlayed.cardType==CardType.HANDMAID):
-		resolve_maid_play(player)
+		resolve_maid_play()
 		return
 	currentGameState=GameState.WAITING_FOR_TARGET
 	highlight_valid_players(cardPlayed.cardType)
@@ -78,10 +87,15 @@ func _on_playing_card(cardPlayed,player):
 func highlight_valid_players(cardType):
 	print("Highlighting valid players")
 	var collection = PlayerManager.players.duplicate()
+	var toRemove=[]
+	if(cardType==CardType.GUARD || cardType==CardType.SAGE || cardType==CardType.BARON || cardType==CardType.KING):
+		toRemove.append(PlayerManager.currentPlayer)
 	for player in collection:
-		if(player.protected):
-			collection.erase(player)
-	if(collection.size()==1):
+		if(player.gameComponents["protected"]):
+			toRemove.append(player)
+	for player in toRemove:
+		collection.erase(player)
+	if(collection.size()==0):
 		emit_signal("perform_transition","Unable to choose anyone...",false)
 		end_of_turn()
 	else:
@@ -108,10 +122,10 @@ func perform_action_to_player(destinationPlayer=selectedPlayer,sourcePlayer=Play
 	
 	#ui_element.get_node("BaronFight").visible=true
 	#emit_signal("baron_card",sourcePlayer,destinationPlayer)
-	resolve_prince_play(selectedPlayer)
+	#resolve_prince_play(selectedPlayer)
 	match cardInPlay.cardType:
 		CardType.GUARD:
-			#ui_element.get_node("GuardGuess").visible=true
+			ui_element.get_node("GuardGuess").visible=true
 			print(cardInPlay.displayText + " is played")
 		CardType.SAGE:
 			#ui_element.get_node("SageGuess").visible=true
@@ -159,11 +173,16 @@ func load_next_player():
 		print("GAME COMPLETED")
 		currentGameState=GameState.ROUND_COMPLETE
 		emit_signal("game_ended",PlayerManager.currentPlayer)
+	elif(DeckManager.deck.is_empty()) :
+		print("Game is indeed over, now checking who has the biggest card!")
+		emit_signal("game_ended",PlayerManager.currentPlayer) #WInner is to be sent here
 	else:
 	#await get_tree().create_timer(1.0).timeout
 		currentGameState=GameState.IDLE
 		PlayerManager.update_current_player()
 		emit_signal("perform_transition","Turn of : " + PlayerManager.currentPlayer.displayPlayer(),true)
+		#Remove protection on your turn
+		PlayerManager.currentPlayer.gameComponents["protected"]=false
 		emit_signal("turn_started")
 	
 func resolve_guard_play(selectedValue):
@@ -193,8 +212,9 @@ func resolve_baron_play(losingPlayer):
 		PlayerManager.remove_player(losingPlayer)
 	end_of_turn()
 	
-func resolve_maid_play(player):
-	player.protected=true
+func resolve_maid_play():
+	PlayerManager.currentPlayer.gameComponents["protected"]=true
+	PlayerManager.currentPlayer.disable_icon(true)
 	emit_signal("perform_transition",PlayerManager.currentPlayer.displayPlayer()+" is now protected...",false)
 	print("RESOLVED")
 	end_of_turn()
