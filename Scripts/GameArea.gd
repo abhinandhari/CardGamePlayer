@@ -24,6 +24,7 @@ func _ready() -> void:
 	await tween.finished
 	$Controls.visible=true
 	gameMode.turn_started.connect(_on_turn_start)
+	gameMode.turn_ended.connect(_on_turn_end)
 	gameMode.card_game_start() #needs refinement.
 	
 func create_deck(gameMode:AbstractGameMode)->void:
@@ -59,5 +60,9 @@ func hide_draw_card_button(isEmpty: bool=true):
 	get_node("Controls/DrawCard").disabled=isEmpty
 
 func _on_turn_start():
+	if(gameMode.drawButtonNeeded):
+		hide_draw_card_button(DeckManager.isDeckEmpty)
+		
+func _on_turn_end():
 	if(gameMode.drawButtonNeeded):
 		hide_draw_card_button(DeckManager.isDeckEmpty)

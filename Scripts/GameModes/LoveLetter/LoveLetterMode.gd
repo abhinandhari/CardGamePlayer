@@ -52,8 +52,8 @@ func create_deck(rules="DEFAULT"):
 	#deck.append(load_up_card_scene().initialize(6)) 
 	#deck.append(load_up_card_scene().initialize(7)) 
 	#deck.append(load_up_card_scene().initialize(8))
-	for i in range(3):
-		deck.append(load_up_card_scene().initialize(4))
+	for i in range(5):
+		deck.append(load_up_card_scene().initialize(5))
 	deck.append(load_up_card_scene().initialize(1))
 	deck.append(load_up_card_scene().initialize(1))
 	deck.append(load_up_card_scene().initialize(1))
@@ -116,26 +116,22 @@ func _on_player_selected(selectedPlayer:Player):
 func perform_action_to_player(destinationPlayer=selectedPlayer,sourcePlayer=PlayerManager.currentPlayer):
 	var ui_element = get_parent().get_node(UI_COMPONENTS_NODE)
 
-	#ui_element.get_node("GuardGuess").visible=true
-	
-	#ui_element.get_node("SageSelect").visible=true
-	#emit_signal("sage_card",destinationPlayer)
-	
-	#ui_element.get_node("BaronFight").visible=true
-	#emit_signal("baron_card",sourcePlayer,destinationPlayer)
-	#resolve_prince_play(selectedPlayer)
 	match cardInPlay.cardType:
 		CardType.GUARD:
 			ui_element.get_node("GuardGuess").visible=true
 			print(cardInPlay.displayText + " is played")
 		CardType.SAGE:
-			#ui_element.get_node("SageGuess").visible=true
+			ui_element.get_node("SageGuess").visible=true
+			emit_signal("sage_card",destinationPlayer)
 			print(cardInPlay.displayText + " is played")
 		CardType.BARON:
+			ui_element.get_node("BaronFight").visible=true
+			emit_signal("baron_card",sourcePlayer,destinationPlayer)
 			print(cardInPlay.displayText + " is played")
 		CardType.HANDMAID:
 			print(cardInPlay.displayText + " is played")
 		CardType.PRINCE:
+			resolve_prince_play(selectedPlayer)
 			print(cardInPlay.displayText + " is played")
 		CardType.KING:
 			print(cardInPlay.displayText + " is played")
