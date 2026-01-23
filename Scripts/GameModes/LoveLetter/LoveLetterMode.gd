@@ -52,7 +52,7 @@ func create_deck(rules="DEFAULT"):
 	#deck.append(load_up_card_scene().initialize(6)) 
 	#deck.append(load_up_card_scene().initialize(7)) 
 	#deck.append(load_up_card_scene().initialize(8))
-	for i in range(8):
+	for i in range(3):
 		deck.append(load_up_card_scene().initialize(4))
 	deck.append(load_up_card_scene().initialize(1))
 	deck.append(load_up_card_scene().initialize(1))
@@ -69,6 +69,7 @@ func card_game_start():
 	for player in PlayerManager.players:
 		player.player_selected.connect(_on_player_selected)
 	print(PlayerManager.players)
+	emit_signal("turn_started")
 	emit_signal("perform_transition","Turn of : " + PlayerManager.currentPlayer.displayPlayer(),true)
 	pass
 

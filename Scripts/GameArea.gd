@@ -23,6 +23,7 @@ func _ready() -> void:
 	gameMode.setup_discard_pile($Controls/DiscardPile)
 	await tween.finished
 	$Controls.visible=true
+	gameMode.turn_started.connect(_on_turn_start)
 	gameMode.card_game_start() #needs refinement.
 	
 func create_deck(gameMode:AbstractGameMode)->void:
@@ -45,15 +46,18 @@ func _on_draw_card_pressed() -> void:
 	#Deck not hiding said card
 	PlayerManager.deal_to_player()
 	if(DeckManager.deck.is_empty()):
-		get_node("Controls/DrawCard").text="EMPTY DECK !"
-		get_node("Controls/DrawCard").disabled=true
+		hide_draw_card_button()
 	#Commenting temporarily. 
 	#TODO: Player should only be updated when the turn is completedly resolved
 
 static func get_game_mode():
 	return gameMode
 
+func hide_draw_card_button(isEmpty: bool=true):
+	if(isEmpty):
+		get_node("Controls/DrawCard").text="EMPTY DECK !"
+	get_node("Controls/DrawCard").disabled=isEmpty
 
-func _on_test_pressed() -> void:
-	print("TEST WORKED")
-	pass # Replace with function body.
+func _on_turn_start():
+	if(gameMode.drawButtonNeeded):
+		hide_draw_card_button(DeckManager.isDeckEmpty)

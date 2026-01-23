@@ -4,7 +4,7 @@ const CARD_SCENE_PATH = "res://Scenes/card.tscn"
 const CARD_SCRIPT_PATH = "res://Scripts/GameModes/***/CardLogic/***Card.gd"
 static var gameModeName:String
 static var deck:Array[AbstractCard]
-
+static var isDeckEmpty=true
 func _ready() -> void:
 	print("Player Manager has been created")
 	gameModeName="DEV"
@@ -12,11 +12,13 @@ func _ready() -> void:
 	
 static func createCardsForGameMode(type:AbstractGameMode):
 	deck = type.create_deck()
+	isDeckEmpty=deck.is_empty()
 	return deck
 	
 static func draw_card(source:Array[AbstractCard] = deck) -> AbstractCard:
 	var cardDrawn = source.pop_back()
 	cardDrawn.get_parent().remove_child(cardDrawn)
+	isDeckEmpty=deck.is_empty()
 	return cardDrawn
 		
 #I do not think this is the best way to do this.	
