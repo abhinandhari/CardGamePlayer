@@ -186,9 +186,9 @@ func load_next_player():
 func resolve_guard_play(selectedValue):
 	currentGameState=GameState.RESOLVING
 	print("The game mode got the value : "+str(selectedValue))
-	print("This is compared with :"+str(selectedPlayer.hand.get(0).cardType))
+	print("This is compared with :"+str(selectedPlayer.hand.get_child(0).cardType))
 	print(CardType.find_key(selectedValue))
-	if(selectedValue == (selectedPlayer.hand.get(0).cardType)):
+	if(selectedValue == (selectedPlayer.hand.get_child(0).cardType)):
 		print("Player should be out!")
 		PlayerManager.remove_player(selectedPlayer)
 	else:
@@ -225,6 +225,10 @@ func resolve_prince_play(player:Player):
 	
 func resolve_king_play(selectedPlayer : Player):
 	print("KING CRIMSON")
+	var selTmpHand = selectedPlayer.get_node("Hand").duplicate()
+	var curTmpHand = PlayerManager.currentPlayer.get_node("Hand").duplicate()
+	selectedPlayer.get_node("Hand").reparent(PlayerManager.currentPlayer)
+	PlayerManager.currentPlayer.get_node("Hand").reparent(selectedPlayer)
 	#var players = get_parent().get_node("Players")
 	#
 	#var tmphand = selectedPlayer.hand

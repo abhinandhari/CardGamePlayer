@@ -89,7 +89,7 @@ func _on_turn_end(card,player):
 func discard_card(card):
 	print("Discard from player : "+str(card))
 	print(emit_signal("card_discarded",card,self))
-	hand.erase(card)
+	hand.remove_child(card)
 	arrange_cards()
 
 func _on_turn_start(): 
