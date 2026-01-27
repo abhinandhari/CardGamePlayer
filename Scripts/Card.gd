@@ -69,7 +69,7 @@ func make_visible( front : bool=true):
 	return
 		
 func scale_to(target_scale:Vector2=_scale):
-	if(get_parent() is Player):
+	if(get_parent().get_parent() is Player):
 		if _tween and _tween.is_running():
 			_tween.kill()
 		_tween = create_tween()
@@ -112,8 +112,7 @@ func _on_image_details_pressed() -> void:
 	
 func play_card():
 	print("Playing Card : " + displayText)
-	print(get_parent())
 	$ImageDetails.disabled=true
 	scale_to()
-	emit_signal("playing_card",self,get_parent())
+	emit_signal("playing_card",self,get_parent().get_parent())
 	

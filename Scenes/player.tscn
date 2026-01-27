@@ -1,37 +1,39 @@
-[gd_scene load_steps=3 format=3 uid="uid://desbrw0wqbf1c"]
+[gd_scene format=3 uid="uid://desbrw0wqbf1c"]
 
 [ext_resource type="Script" uid="uid://bx5rqo8oavy46" path="res://Scripts/Player/Player.gd" id="1_v0iea"]
 [ext_resource type="Texture2D" uid="uid://c2b6xfoooiq08" path="res://Sprites/LoveLetter/PlayerSprites/player1.png" id="2_cvnsp"]
 
-[node name="Player" type="Node2D"]
+[node name="Player" type="Node2D" unique_id=666220701]
 script = ExtResource("1_v0iea")
 
-[node name="PlayerIcon" type="TextureButton" parent="."]
+[node name="PlayerIcon" type="TextureButton" parent="." unique_id=1581184689]
 offset_right = 40.0
 offset_bottom = 40.0
 mouse_filter = 1
 disabled = true
 texture_normal = ExtResource("2_cvnsp")
 
-[node name="UIPlayerDetails" type="VBoxContainer" parent="."]
+[node name="UIPlayerDetails" type="VBoxContainer" parent="." unique_id=572190283]
 visible = false
 z_index = 10
 offset_right = 123.0
 offset_bottom = 23.0
 
-[node name="DetailBox" type="HBoxContainer" parent="UIPlayerDetails"]
+[node name="DetailBox" type="HBoxContainer" parent="UIPlayerDetails" unique_id=1978635225]
 layout_mode = 2
 
-[node name="CardCountHeader" type="Label" parent="UIPlayerDetails/DetailBox"]
+[node name="CardCountHeader" type="Label" parent="UIPlayerDetails/DetailBox" unique_id=1525321868]
 z_index = 10
 layout_mode = 2
 text = "Cards In Hand :"
 
-[node name="CardCount" type="Label" parent="UIPlayerDetails/DetailBox"]
+[node name="CardCount" type="Label" parent="UIPlayerDetails/DetailBox" unique_id=268102330]
 layout_mode = 2
 text = "0"
 
-[node name="EffectsComponent" type="Node" parent="."]
+[node name="EffectsComponent" type="Node" parent="." unique_id=1590274498]
+
+[node name="Hand" type="Node2D" parent="." unique_id=871322372]
 
 [connection signal="mouse_entered" from="PlayerIcon" to="." method="_on_player_icon_mouse_entered"]
 [connection signal="mouse_exited" from="PlayerIcon" to="." method="_on_player_icon_mouse_exited"]

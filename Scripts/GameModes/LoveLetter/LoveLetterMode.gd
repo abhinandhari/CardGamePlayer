@@ -53,7 +53,7 @@ func create_deck(rules="DEFAULT"):
 	#deck.append(load_up_card_scene().initialize(7)) 
 	#deck.append(load_up_card_scene().initialize(8))
 	for i in range(5):
-		deck.append(load_up_card_scene().initialize(5))
+		deck.append(load_up_card_scene().initialize(6))
 	deck.append(load_up_card_scene().initialize(1))
 	deck.append(load_up_card_scene().initialize(1))
 	deck.append(load_up_card_scene().initialize(1))
@@ -111,7 +111,7 @@ func _on_player_selected(selectedPlayer:Player):
 		perform_action_to_player()
 	else:
 		print("Nothing should happen")
-	return selectedPlayer.hand.get(0)
+	return selectedPlayer.hand.get_child(0)
 		
 func perform_action_to_player(destinationPlayer=selectedPlayer,sourcePlayer=PlayerManager.currentPlayer):
 	var ui_element = get_parent().get_node(UI_COMPONENTS_NODE)
@@ -134,6 +134,7 @@ func perform_action_to_player(destinationPlayer=selectedPlayer,sourcePlayer=Play
 			resolve_prince_play(selectedPlayer)
 			print(cardInPlay.displayText + " is played")
 		CardType.KING:
+			resolve_king_play(selectedPlayer)
 			print(cardInPlay.displayText + " is played")
 		CardType.QUEEN:
 			print(cardInPlay.displayText + " is played")
@@ -217,7 +218,16 @@ func resolve_maid_play():
 	end_of_turn()
 	
 func resolve_prince_play(player:Player):
-	player.discard_card(player.hand.get(0))
+	player.discard_card(player.hand.get_child(0))
 	PlayerManager.deal_to_player(player)
 	end_of_turn()
 	pass
+	
+func resolve_king_play(selectedPlayer : Player):
+	print("KING CRIMSON")
+	#var players = get_parent().get_node("Players")
+	#
+	#var tmphand = selectedPlayer.hand
+	#selectedPlayer.hand = PlayerManager.currentPlayer.hand
+	#PlayerManager.currentPlayer.hand=tmphand
+	end_of_turn()

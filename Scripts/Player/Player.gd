@@ -1,12 +1,14 @@
 class_name Player extends Node2D
 
-var hand : Array[AbstractCard] = []
+@onready var hand = $Hand
 var id :int
 var scaler = 60
 var showCards: bool:
 	set(value):
+		if(hand==null):
+			return
 		showCards = value
-		for card in hand:
+		for card in hand.get_children():
 			card.make_visible(value)
 var highlight=false
 var gameComponents:Dictionary
@@ -23,17 +25,18 @@ func _ready() -> void:
 	GameArea.get_game_mode().turn_ended.connect(_on_turn_end)
 	GameArea.get_game_mode().turn_started.connect(_on_turn_start)
 	gameComponents = GameArea.get_game_mode().gameModeComponents.duplicate()
+	hand=$Hand
 	queue_redraw()
 		
-func add_card(card):
+func add_card(card:AbstractCard):
 	#card.position=Vector2(120 + scaler*hand.size(),120)
 	card.make_visible(showCards)
-	hand.append(card)
+	#hand.append(card)
 	update_details()
 	print("Player "+str(id)+" : "+str(hand))
 	#print("Main Deck : " + str(DeckManager.deck))
 	card.playing_card.connect(_on_playing_card)
-	add_child(card)
+	get_node("Hand").add_child(card)
 	arrange_cards()
 		
 func set_id(id:int)->void:
@@ -64,7 +67,7 @@ func make_details_visible():
 	
 func update_details():
 	var detailBox = get_node("UIPlayerDetails/DetailBox")
-	detailBox.get_node("CardCount").text=str(hand.size())
+	detailBox.get_node("CardCount").text=str(hand.get_child_count())
 
 func _on_player_icon_pressed() -> void:
 	print(str(id)+"PRESSED!")
@@ -103,6 +106,6 @@ func disable_icon(x:bool=true):
 	$PlayerIcon.disabled=x
 
 func arrange_cards():
-	for i in range(hand.size()):
-		hand[i].position=Vector2(120 + scaler*i,120)
+	for i in range(hand.get_child_count()):
+		hand.get_child(i).position=Vector2(120 + scaler*i,120)
 	pass

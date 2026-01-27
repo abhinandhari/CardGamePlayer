@@ -1,4 +1,4 @@
-class_name AbstractGameMode extends Node
+class_name AbstractGameMode extends Node2D
 #DO NOT USE DIRECTLY
 
 @export var gameModeName:String

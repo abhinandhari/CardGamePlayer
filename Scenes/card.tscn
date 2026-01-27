@@ -1,11 +1,11 @@
-[gd_scene load_steps=2 format=3 uid="uid://b2qconw4dn3mk"]
+[gd_scene format=3 uid="uid://b2qconw4dn3mk"]
 
 [ext_resource type="Script" uid="uid://cwdnhod7o5unp" path="res://Scripts/Card.gd" id="1_0qqmn"]
 
-[node name="Card" type="Node2D"]
+[node name="Card" type="Node2D" unique_id=1519599803]
 script = ExtResource("1_0qqmn")
 
-[node name="ImageDetails" type="TextureButton" parent="."]
+[node name="ImageDetails" type="TextureButton" parent="." unique_id=1384220314]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -16,13 +16,13 @@ grow_vertical = 2
 mouse_filter = 1
 stretch_mode = 0
 
-[node name="Back" type="TextureRect" parent="ImageDetails"]
+[node name="Back" type="TextureRect" parent="ImageDetails" unique_id=443880729]
 visible = false
 layout_mode = 0
 offset_right = 400.0
 offset_bottom = 400.0
 
-[node name="Art" type="TextureRect" parent="ImageDetails"]
+[node name="Art" type="TextureRect" parent="ImageDetails" unique_id=333518910]
 layout_mode = 0
 scale = Vector2(0.2, 0.2)
 

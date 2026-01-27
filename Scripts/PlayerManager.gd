@@ -83,6 +83,7 @@ static func deal_to_all_players(cards: int):
 static func start_turn():
 	print("Turn of "+currentPlayer.displayPlayer())
 	deal_to_player()
+	currentPlayer.showCards=true
 	#TO DO : SHOW VISUAL CHANGES ON PLAYER	
 	
 static func enable_selection(playerList):
