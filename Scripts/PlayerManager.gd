@@ -95,5 +95,9 @@ static func enable_selection(playerList):
 static func remove_player(selectedPlayer):
 	selectedPlayer.queue_free()
 	players.erase(selectedPlayer)
-	
+
+static func print_all_player_data():
+	for ele in players:
+		print(ele)
+		print(ele.hand)
 	

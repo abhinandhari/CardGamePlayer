@@ -1,11 +1,11 @@
-[gd_scene load_steps=2 format=3 uid="uid://c53ccdgcjf7bk"]
+[gd_scene format=3 uid="uid://c53ccdgcjf7bk"]
 
 [ext_resource type="Script" uid="uid://chd0llib5h5hj" path="res://Scripts/MenuControls/StartScreen.gd" id="1_82sop"]
 
-[node name="StartScene" type="Node2D"]
+[node name="StartScene" type="Node2D" unique_id=1949375250]
 script = ExtResource("1_82sop")
 
-[node name="OptionsContainer" type="VBoxContainer" parent="."]
+[node name="OptionsContainer" type="VBoxContainer" parent="." unique_id=193428060]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -17,33 +17,33 @@ grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(2, 2)
 
-[node name="GameMode" type="HBoxContainer" parent="OptionsContainer"]
+[node name="GameMode" type="HBoxContainer" parent="OptionsContainer" unique_id=1608305730]
 layout_mode = 2
 
-[node name="Select Game Mode" type="Label" parent="OptionsContainer/GameMode"]
+[node name="Select Game Mode" type="Label" parent="OptionsContainer/GameMode" unique_id=641450753]
 layout_mode = 2
 text = "Game Mode : "
 
-[node name="OptionButton" type="OptionButton" parent="OptionsContainer/GameMode"]
+[node name="OptionButton" type="OptionButton" parent="OptionsContainer/GameMode" unique_id=142434805]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="PlayerCount" type="HBoxContainer" parent="OptionsContainer"]
+[node name="PlayerCount" type="HBoxContainer" parent="OptionsContainer" unique_id=1351267615]
 layout_mode = 2
 
-[node name="Player" type="Label" parent="OptionsContainer/PlayerCount"]
+[node name="Player" type="Label" parent="OptionsContainer/PlayerCount" unique_id=1397044204]
 layout_mode = 2
 text = "Player Count : "
 
-[node name="OptionButton" type="OptionButton" parent="OptionsContainer/PlayerCount"]
+[node name="OptionButton" type="OptionButton" parent="OptionsContainer/PlayerCount" unique_id=164612596]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Start" type="Button" parent="OptionsContainer"]
+[node name="Start" type="Button" parent="OptionsContainer" unique_id=173011437]
 layout_mode = 2
 text = "Start !"
 
-[node name="Control" type="Control" parent="."]
+[node name="Control" type="Control" parent="." unique_id=593965381]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0

@@ -81,6 +81,7 @@ func _draw():
 			draw_rect(Rect2(Vector2.ZERO, $PlayerIcon.size), Color.GREEN, false, 20)
 		
 func _on_turn_end(card,player):
+
 	if(self==player):
 		discard_card(card)
 	#Disable clicks

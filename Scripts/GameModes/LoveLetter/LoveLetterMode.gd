@@ -160,6 +160,8 @@ func end_of_turn():
 	reset_for_new_turn()
 	#Simply emulating next turn. Multiplayer will use another logic
 	load_next_player()
+	print("NEW PLAYER IS : ",PlayerManager.currentPlayer)
+	print(PlayerManager.print_all_player_data())
 
 func reset_for_new_turn():
 	cardInPlay=null
@@ -223,15 +225,31 @@ func resolve_prince_play(player:Player):
 	end_of_turn()
 	pass
 	
-func resolve_king_play(selectedPlayer : Player):
-	print("KING CRIMSON")
-	var selTmpHand = selectedPlayer.get_node("Hand").duplicate()
-	var curTmpHand = PlayerManager.currentPlayer.get_node("Hand").duplicate()
-	selectedPlayer.get_node("Hand").reparent(PlayerManager.currentPlayer)
-	PlayerManager.currentPlayer.get_node("Hand").reparent(selectedPlayer)
-	#var players = get_parent().get_node("Players")
-	#
-	#var tmphand = selectedPlayer.hand
-	#selectedPlayer.hand = PlayerManager.currentPlayer.hand
-	#PlayerManager.currentPlayer.hand=tmphand
+func resolve_king_play(targetPlayer: Player):
+	var sourcePlayer = PlayerManager.currentPlayer
+	# 1. Find Player 1's hidden card (the one that is NOT the King currently being played)
+	var sourceCard = null
+	for child in sourcePlayer.hand.get_children():
+		if child != cardInPlay:
+			sourceCard = child
+			break			
+	# 2. Get Player 2's card
+	var targetCard = targetPlayer.hand.get_child(0) if targetPlayer.hand.get_child_count() > 0 else null
+	# Safety check: make sure both cards were found
+	if sourceCard == null or targetCard == null:
+		print("Swap failed: Missing cards. Source hidden card: ", sourceCard, " Target card: ", targetCard)
+		end_of_turn()
+		return
+	# 3. Perform the swap on the node tree
+	sourceCard.make_visible(false)
+	sourcePlayer.hand.remove_child(sourceCard)
+	targetPlayer.hand.remove_child(targetCard)
+	sourcePlayer.hand.add_child(targetCard)
+	targetPlayer.hand.add_child(sourceCard)
+	# 4. Notify UI/Players
+	emit_signal(
+		"perform_transition", 
+		sourcePlayer.displayPlayer() + " swapped hands with " + targetPlayer.displayPlayer(), 
+		false
+	)
 	end_of_turn()
