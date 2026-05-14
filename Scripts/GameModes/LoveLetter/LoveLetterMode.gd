@@ -40,27 +40,27 @@ func create_deck(rules="DEFAULT"):
 	var deck :Array[AbstractCard]=[]
 	#var card:LoveLetterCard
 	##Actual game mode
-	#for i in range(5):
-		#deck.append(load_up_card_scene().initialize(1)) 
-		#pass
-	#for i in range(2):
-		#deck.append(load_up_card_scene().initialize(2)) 
-		#deck.append(load_up_card_scene().initialize(3)) 
-		#deck.append(load_up_card_scene().initialize(4)) 
-		#deck.append(load_up_card_scene().initialize(5)) 
-		#pass
-	#deck.append(load_up_card_scene().initialize(6)) 
-	#deck.append(load_up_card_scene().initialize(7)) 
-	#deck.append(load_up_card_scene().initialize(8))
-	#Specific card testing
 	for i in range(5):
-		deck.append(load_up_card_scene().initialize(7))
+		deck.append(load_up_card_scene().initialize(1)) 
+		pass
+	for i in range(2):
+		deck.append(load_up_card_scene().initialize(2)) 
+		deck.append(load_up_card_scene().initialize(3)) 
+		deck.append(load_up_card_scene().initialize(4)) 
+		deck.append(load_up_card_scene().initialize(5)) 
+		pass
+	deck.append(load_up_card_scene().initialize(6)) 
+	deck.append(load_up_card_scene().initialize(7)) 
+	deck.append(load_up_card_scene().initialize(8))
+	# # #Specific card testing
+	#for i in range(5):
+		#deck.append(load_up_card_scene().initialize(7))
 		
 		# One of each card
-	deck.append(load_up_card_scene().initialize(5))
-	deck.append(load_up_card_scene().initialize(6))
-	deck.append(load_up_card_scene().initialize(8))
-	deck.append(load_up_card_scene().initialize(4))
+	#deck.append(load_up_card_scene().initialize(1))
+	#deck.append(load_up_card_scene().initialize(2))
+	#deck.append(load_up_card_scene().initialize(3))
+	#deck.append(load_up_card_scene().initialize(4))
 	#deck.append(load_up_card_scene().initialize(5))
 	#deck.append(load_up_card_scene().initialize(6))
 	#deck.append(load_up_card_scene().initialize(7))
@@ -180,6 +180,8 @@ func end_of_turn():
 	print(PlayerManager.print_all_player_data())
 
 func reset_for_new_turn():
+	for card in PlayerManager.currentPlayer.hand.get_children():
+		card.set_selectable(true)
 	cardInPlay=null
 	selectedPlayer=null
 	currentGameState=GameState.IDLE
@@ -304,8 +306,6 @@ func on_turn_start(player : Player):
 	
 func resolve_queen_play():
 	print("QUEEN REACHED")
-	for card in PlayerManager.currentPlayer.hand.get_children():
-		card.set_selectable(true)
 	end_of_turn()
 	pass
 	
