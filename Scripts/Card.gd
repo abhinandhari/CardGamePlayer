@@ -116,3 +116,14 @@ func play_card():
 	scale_to()
 	emit_signal("playing_card",self,get_parent().get_parent())
 	
+func set_selectable( is_selectable :bool ):
+	# 1. Block/Allow Mouse Input on the Control node
+	if is_selectable:
+		$ImageDetails.modulate = Color(1, 1, 1, 1) # Normal bright color
+		$ImageDetails.disabled=false  
+	else:
+		$ImageDetails.modulate = Color(0.4, 0.4, 0.4, 0.7) # Darkened / Greyed out
+		$ImageDetails.disabled=true
+	pass
+	
+	

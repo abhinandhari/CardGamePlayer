@@ -38,12 +38,12 @@ signal baron_card(losingPlayer)
 
 func create_deck(rules="DEFAULT"):
 	var deck :Array[AbstractCard]=[]
-	var card
+	#var card:LoveLetterCard
+	##Actual game mode
 	#for i in range(5):
-		#card=load_up_card_scene().initialize(1) #Guards
-		#deck.append(card) 
+		#deck.append(load_up_card_scene().initialize(1)) 
 		#pass
-	#for i in range(5):
+	#for i in range(2):
 		#deck.append(load_up_card_scene().initialize(2)) 
 		#deck.append(load_up_card_scene().initialize(3)) 
 		#deck.append(load_up_card_scene().initialize(4)) 
@@ -52,11 +52,19 @@ func create_deck(rules="DEFAULT"):
 	#deck.append(load_up_card_scene().initialize(6)) 
 	#deck.append(load_up_card_scene().initialize(7)) 
 	#deck.append(load_up_card_scene().initialize(8))
+	#Specific card testing
 	for i in range(5):
-		deck.append(load_up_card_scene().initialize(6))
-	deck.append(load_up_card_scene().initialize(1))
-	deck.append(load_up_card_scene().initialize(1))
-	deck.append(load_up_card_scene().initialize(1))
+		deck.append(load_up_card_scene().initialize(7))
+		
+		# One of each card
+	deck.append(load_up_card_scene().initialize(5))
+	deck.append(load_up_card_scene().initialize(6))
+	deck.append(load_up_card_scene().initialize(8))
+	deck.append(load_up_card_scene().initialize(4))
+	#deck.append(load_up_card_scene().initialize(5))
+	#deck.append(load_up_card_scene().initialize(6))
+	#deck.append(load_up_card_scene().initialize(7))
+	#deck.append(load_up_card_scene().initialize(8))
 
 	pass 
 	connect_card_signals(deck)
@@ -81,6 +89,12 @@ func _on_playing_card(cardPlayed,player):
 	cardInPlay=cardPlayed
 	if(cardPlayed.cardType==CardType.HANDMAID):
 		resolve_maid_play()
+		return
+	if(cardPlayed.cardType==CardType.QUEEN):
+		resolve_queen_play()
+		return
+	if(cardPlayed.cardType==CardType.PRINCESS):
+		resolve_princess_play()
 		return
 	currentGameState=GameState.WAITING_FOR_TARGET
 	highlight_valid_players(cardPlayed.cardType)
@@ -115,13 +129,12 @@ func _on_player_selected(selectedPlayer:Player):
 		
 func perform_action_to_player(destinationPlayer=selectedPlayer,sourcePlayer=PlayerManager.currentPlayer):
 	var ui_element = get_parent().get_node(UI_COMPONENTS_NODE)
-
 	match cardInPlay.cardType:
 		CardType.GUARD:
 			ui_element.get_node("GuardGuess").visible=true
 			print(cardInPlay.displayText + " is played")
 		CardType.SAGE:
-			ui_element.get_node("SageGuess").visible=true
+			ui_element.get_node("SageSelect").visible=true
 			emit_signal("sage_card",destinationPlayer)
 			print(cardInPlay.displayText + " is played")
 		CardType.BARON:
@@ -129,6 +142,7 @@ func perform_action_to_player(destinationPlayer=selectedPlayer,sourcePlayer=Play
 			emit_signal("baron_card",sourcePlayer,destinationPlayer)
 			print(cardInPlay.displayText + " is played")
 		CardType.HANDMAID:
+			#Not needed
 			print(cardInPlay.displayText + " is played")
 		CardType.PRINCE:
 			resolve_prince_play(selectedPlayer)
@@ -137,8 +151,10 @@ func perform_action_to_player(destinationPlayer=selectedPlayer,sourcePlayer=Play
 			resolve_king_play(selectedPlayer)
 			print(cardInPlay.displayText + " is played")
 		CardType.QUEEN:
+			#Not needed
 			print(cardInPlay.displayText + " is played")
 		CardType.PRINCESS:
+			#Not needed
 			print(cardInPlay.displayText + " is played")
 		_:
 			print("Invalid move...")
@@ -175,7 +191,9 @@ func load_next_player():
 		emit_signal("game_ended",PlayerManager.currentPlayer)
 	elif(DeckManager.deck.is_empty()) :
 		print("Game is indeed over, now checking who has the biggest card!")
-		emit_signal("game_ended",PlayerManager.currentPlayer) #WInner is to be sent here
+		var winner = comparePlayerCards()
+		print("WINNER : " + str(winner))
+		emit_signal("game_ended",winner) #WInner is to be sent here
 	else:
 	#await get_tree().create_timer(1.0).timeout
 		currentGameState=GameState.IDLE
@@ -208,7 +226,7 @@ func resolve_baron_play(losingPlayer):
 	if(losingPlayer==null):
 		emit_signal("perform_transition","No one lost...",false)
 	else:
-		emit_signal("perform_transition",losingPlayer.displayPlayer()+"lost...",false)
+		emit_signal("perform_transition",losingPlayer.displayPlayer()+" lost... with "+str(losingPlayer.hand.get_child(0)),false)
 		PlayerManager.remove_player(losingPlayer)
 	end_of_turn()
 	
@@ -220,7 +238,13 @@ func resolve_maid_play():
 	end_of_turn()
 	
 func resolve_prince_play(player:Player):
+	var card :LoveLetterCard= player.hand.get_child(0)
 	player.discard_card(player.hand.get_child(0))
+	if(card.cardType == CardType.PRINCESS):
+		emit_signal("perform_transition",player.displayPlayer()+" lost his princess...",false)
+		PlayerManager.remove_player(player)
+		end_of_turn()
+		return
 	PlayerManager.deal_to_player(player)
 	end_of_turn()
 	pass
@@ -253,3 +277,61 @@ func resolve_king_play(targetPlayer: Player):
 		false
 	)
 	end_of_turn()
+	pass
+	
+func on_turn_start(player : Player):
+	#var currentPlayer=PlayerManager.currentPlayer	
+	if(player!=PlayerManager.currentPlayer):
+		return
+	var hand_children = player.hand.get_children()
+	var holds_countess = false
+	var holds_restricted_card = false
+	for card in hand_children:
+		if card.cardType == CardType.QUEEN: # Using QUEEN from your enum as Countess placeholder
+			holds_countess = true
+		if card.cardType == CardType.PRINCE or card.cardType == CardType.KING or card.cardType == CardType.PRINCESS:
+			holds_restricted_card = true
+	for card in hand_children:
+		if holds_countess and holds_restricted_card:
+			if card.cardType == CardType.PRINCE or card.cardType == CardType.KING or card.cardType == CardType.PRINCESS:
+				card.set_selectable(false)
+			else:
+				card.set_selectable(true)
+		else:
+			# Reset all cards to selectable under normal conditions
+			card.set_selectable(true)
+	pass
+	
+func resolve_queen_play():
+	print("QUEEN REACHED")
+	for card in PlayerManager.currentPlayer.hand.get_children():
+		card.set_selectable(true)
+	end_of_turn()
+	pass
+	
+func resolve_princess_play():
+	emit_signal(
+	"perform_transition", 
+	PlayerManager.currentPlayer.displayPlayer() + " surrendered the Princess !!! . Shame!", 
+		false
+	)
+	PlayerManager.remove_player(PlayerManager.currentPlayer)
+	end_of_turn()
+	
+func comparePlayerCards():
+	var currWinner = []
+	var highestPower = -1
+	for player in PlayerManager.players:
+		var playerCard :AbstractCard = player.hand.get_child(0)
+		print(str(playerCard))
+		if(playerCard.get_power() > highestPower):
+			currWinner.clear()
+			currWinner.append(player)
+			highestPower = playerCard.get_power()
+		elif(playerCard.get_power() == highestPower):
+			currWinner.append(player)
+		else:
+			continue
+	return currWinner
+	
+	

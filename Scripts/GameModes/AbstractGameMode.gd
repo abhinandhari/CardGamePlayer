@@ -78,3 +78,6 @@ func _on_playing_card(cardPlayed,player):
 func setup_discard_pile(discardPileNode):
 	emit_signal("to_discard_pile_node",PlayerManager.players.size(),requiresPlayerNames)
 	pass
+	
+func on_turn_start(player : Player):
+	pass

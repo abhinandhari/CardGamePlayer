@@ -95,6 +95,7 @@ func discard_card(card):
 
 func _on_turn_start(): 
 	print("Turn Start send to "+displayPlayer())
+	GameArea.get_game_mode().on_turn_start(self)
 	#if(self==PlayerManager.currentPlayer):
 		#$PlayerIcon.disabled=false
 		#print("TTT Protection ended "+str(PlayerManager.currentPlayer.displayPlayer()))

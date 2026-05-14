@@ -18,7 +18,7 @@ func _on_button_pressed() -> void:
 func show_connected_card(player):
 	print("I Reached here with player : "+str(player))
 	print("The card he has is : "+str(player.hand))
-	var requiredCard = player.hand.get(0)
+	var requiredCard = player.hand.get_child(0)
 	var nameOfCard = LoveLetterMode.CardType.find_key(requiredCard.cardType)
 	$Panel/VBoxContainer/Title.text=str("CARD OF " + player.displayPlayer() +"...")
 	$Panel/VBoxContainer/CardName.text=nameOfCard

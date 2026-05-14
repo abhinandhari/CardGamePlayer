@@ -13,10 +13,10 @@ func on_card_fight(sourcePlayer,destinationPlayer):
 	print("WE REACHED HERE")
 	$Label.text="Comparing between "+sourcePlayer.displayPlayer()+" & "+destinationPlayer.displayPlayer()
 	var losingPlayer=null
-	var sourcePlayerCard = sourcePlayer.hand.get(0)
+	var sourcePlayerCard = sourcePlayer.hand.get_child(0)
 	if(sourcePlayerCard== GameArea.get_game_mode().cardInPlay):
-		sourcePlayerCard = sourcePlayer.hand.get(1)
-	var destinationPlayerCard = destinationPlayer.hand.get(0)
+		sourcePlayerCard = sourcePlayer.hand.get_child(1)
+	var destinationPlayerCard = destinationPlayer.hand.get_child(0)
 	if(sourcePlayerCard.cardType > destinationPlayerCard.cardType):
 		losingPlayer = destinationPlayer
 	if(sourcePlayerCard.cardType<destinationPlayerCard.cardType):
